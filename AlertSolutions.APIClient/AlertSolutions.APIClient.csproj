@@ -59,6 +59,7 @@
     <Compile Include="Documents\Document.cs" />
     <Compile Include="Documents\IContainDocuments.cs" />
     <Compile Include="EmailReportItem.cs" />
+    <Compile Include="IAPIClient.cs" />
     <Compile Include="OrderReport.cs" />
     <Compile Include="OrderReportBuilder.cs" />
     <Compile Include="Orders\EmailBase.cs" />

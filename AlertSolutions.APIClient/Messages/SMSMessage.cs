@@ -6,6 +6,7 @@ using AlertSolutions.API.Orders;
 
 namespace AlertSolutions.API.Messages
 {
+    [Serializable]
     public class SMSMessage : SMSBase, IMessage
     {
         // accessors for transactional info ( goes into each class that inherits ITransactionalOrder)

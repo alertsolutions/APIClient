@@ -6,11 +6,16 @@ using System.Xml.Linq;
 
 namespace AlertSolutions.API.Documents
 {
+    [Serializable]
     public class TextMessage : DocumentBase
     {
-        internal TextMessage(string filePath) : base(filePath){}
-        internal TextMessage(int fileID) : base(fileID){}
-        internal TextMessage(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }
+        public TextMessage()
+        {
+        }
+
+        public TextMessage(string filePath) : base(filePath){}
+        public TextMessage(int fileID) : base(fileID){}
+        public TextMessage(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }
 
         public static TextMessage FromFile(string filePath)
         {

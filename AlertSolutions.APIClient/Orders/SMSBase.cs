@@ -6,7 +6,8 @@ using AlertSolutions.API.Documents;
 
 namespace AlertSolutions.API.Orders
 {
-    // handle code common to MT and ML
+    // handle code common to MT and M
+    [Serializable]
     public abstract class SMSBase : Order
     {
         public string ShortCode { get; set; }

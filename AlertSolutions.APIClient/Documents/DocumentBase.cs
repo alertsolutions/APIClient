@@ -5,27 +5,32 @@ using System.Xml.Linq;
 namespace AlertSolutions.API.Documents
 {
     // base class with code/structure common to all document like objects in the API
+    [Serializable]
     public abstract class DocumentBase
     {
+        public DocumentBase()
+        {
+        }
+
         private int _fileID { get; set; }
         private string _fileName { get; set; }
         private byte[] _fileBinary { get; set; }
 
-        internal DocumentBase(string filePath)
+        public DocumentBase(string filePath)
         {
             _fileName = System.IO.Path.GetFileName(filePath);
             _fileBinary = System.IO.File.ReadAllBytes(filePath);
             _fileID = -1; // default that indicates not to use it
         }
 
-        internal DocumentBase(string fileName, byte[] fileBinary)
+        public DocumentBase(string fileName, byte[] fileBinary)
         {
             _fileName = fileName;
             _fileBinary = fileBinary;
             _fileID = -1; // default that indicates not to use it
         }
 
-        internal DocumentBase(int fileID)
+        public DocumentBase(int fileID)
         {
             _fileID = fileID;
         }

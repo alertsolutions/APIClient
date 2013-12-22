@@ -16,6 +16,7 @@ namespace AlertSolutions.API.Messages
     }
 
     // common code for transactional orders
+    [Serializable]
     internal class TransactionalInfo
     {
         // none right now

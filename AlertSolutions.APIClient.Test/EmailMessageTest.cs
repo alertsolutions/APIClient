@@ -35,7 +35,10 @@ namespace AlertSolutions.APIClient.Test
             et.TextBody = TextBody.FromText(textbody);
             et.HtmlBody = HtmlBody.FromText(htmlbody);
             Assert.IsNotNull(et);
+            Assert.IsNotNull(et.EmailTo);
+            Assert.IsNotNull(et.ToXml());
         }
+
 
     }
 }

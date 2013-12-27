@@ -9,42 +9,6 @@ namespace AlertSolutions.API
 {
     internal static class Utilities
     {
-        internal static byte[] ConvertToByteArray(string str)
-        {
-            return Convert.FromBase64String(str);
-        }
-
-        internal static string ConvertApiContactsToCsv(List<ApiContact> contactList)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(ApiContact.NAME_HEADER);
-            sb.Append(",");
-            sb.Append(ApiContact.EMAIL_HEADER);
-            sb.Append(",");
-            sb.Append(ApiContact.SMS_HEADER);
-            sb.Append(",");
-            sb.Append(ApiContact.VOICE_HEADER);
-            sb.Append(",");
-            sb.Append(ApiContact.FAX_HEADER);
-            sb.Append('\n');
-
-            foreach (var contact in contactList)
-            {
-                sb.Append(contact.Name);
-                sb.Append(",");
-                sb.Append(contact.Email);
-                sb.Append(",");
-                sb.Append(contact.SmsPhone);
-                sb.Append(",");
-                sb.Append(contact.VoicePhone);
-                sb.Append(",");
-                sb.Append(contact.FaxPhone);
-                sb.Append('\n');
-            }
-
-            return sb.ToString();
-        }
 
         internal static void StripNodeFromElement(XElement element, string nodeName)
         {

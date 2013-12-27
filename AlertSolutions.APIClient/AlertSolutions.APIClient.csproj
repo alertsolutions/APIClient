@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiContact.cs" />
     <Compile Include="CallScript.cs" />
     <Compile Include="Documents\Attachment.cs" />
     <Compile Include="Documents\DocumentBase.cs" />

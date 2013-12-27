@@ -19,7 +19,6 @@ namespace AlertSolutions.APIClient.Test
             string textMessage =
                 new StreamReader(GetType().Assembly.GetManifestResourceStream("AlertSolutions.APIClient.Test.TestFiles.TextMessage.txt")).ReadToEnd();
 
-
             var mt = new SMSMessage();
             mt.Number = "5086128160";
             //mt.Number = 4013002095;

@@ -15,7 +15,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             var password = "pentagon625";
             var url = "http://weblaunch.blifax.com/postapi";
 
-            var client = new APIClient(url, user, password);
+            var client = new ApiClient(url, user, password);
             var response = client.GetLists(ReportReturnType.XML);
             Console.WriteLine(response);
 

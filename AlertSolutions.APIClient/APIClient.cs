@@ -24,11 +24,14 @@ namespace AlertSolutions.API
         CSV,
     }
 
-    public class APIClient : IAPIClient
+    public class ApiClient : IAPIClient
     {
-        private readonly string _url;
-        private readonly string _user;
-        private readonly string _password;
+        private string _url;
+        private string _user;
+        private string _password;
+        private bool isInitialized = false;
+        IWebClientProxy webClientProxy = ApiClientResolver.Instance.Container.Resolve<IWebClientProxy>();
+
 
         /// <summary>
         /// If activated the client pretends it's sending broadcasts or messages.
@@ -37,19 +40,36 @@ namespace AlertSolutions.API
         /// </summary>
         public bool TestMode { get; set; }
 
-        public APIClient(string url, string user, string password)
+        public void Initialize(string url, string user, string password)
         {
             _url = url;
             _user = user;
             _password = password;
             TestMode = false;
+            this.isInitialized = true;
         }
+
+        public void CheckInitialized()
+        {
+            if (!this.isInitialized) throw new ApplicationException("APIClient.Initialized must be called prior to this method");
+        }
+
+        public ApiClient()
+        {
+        }
+
+        public ApiClient(string url, string user, string password)
+        {
+            Initialize(url,user,password);
+        }
+
 
         /// <summary>
         /// Sends only broadcasts.
         /// </summary>
         public OrderResponse LaunchBroadcast(IBroadcast broadcast)
         {
+            CheckInitialized();
             return SendOrder(broadcast);
         }
 
@@ -58,6 +78,7 @@ namespace AlertSolutions.API
         /// </summary>
         public OrderResponse LaunchMessage(IMessage message)
         {
+            CheckInitialized();
             return SendOrder(message);
         }
 
@@ -67,6 +88,7 @@ namespace AlertSolutions.API
         /// </summary>
         public OrderResponse SendOrder(IOrder order)
         {
+            CheckInitialized();
             order = Utilities.OffsetOrderTimeFields(order);
             var xml = order.ToXml();
             return SendOrder(xml);
@@ -83,10 +105,12 @@ namespace AlertSolutions.API
         /// </summary>
         public OrderResponse SendOrder(string xml)
         {
+            CheckInitialized();
             return SendOrder(XDocument.Parse(xml));
         }
         public OrderResponse SendOrder(XDocument xml)
         {
+            CheckInitialized();
             var type = "";
             var orderid = -1;
             var transactionid = "";
@@ -126,13 +150,7 @@ namespace AlertSolutions.API
 
                     string response;
                     sw.Start();
-
-                    using (var webClient = new WebClient())
-                    {
-                        webClient.Headers.Add("Content-Type: text/xml");
-                        response = webClient.UploadString(location.ToString(), xml.ToString());
-                    }
-
+                    response = webClientProxy.UploadString(location.ToString(), xml.ToString());
                     sw.Stop();
 
                     var xmlDoc = new XmlDocument();
@@ -164,17 +182,17 @@ namespace AlertSolutions.API
             catch (WebException wex)
             {
                 status = RequestResultType.Error;
-                error = "Server Error: " + wex.ToString();
+                error = "Server Error: " + wex;
             }
             catch (TimeoutException tex)
             {
                 status = RequestResultType.Error;
-                error = "Server Error: " + tex.ToString();
+                error = "Server Error: " + tex;
             }
             catch (Exception ex)
             {
                 status = RequestResultType.Error;
-                error = "Error: " + ex.ToString(); 
+                error = "Error: " + ex; 
             }
             finally
             {
@@ -198,11 +216,13 @@ namespace AlertSolutions.API
         /// </summary>
         public OrderReport GetOrderReport(int OrderID, OrderType type, ReportReturnType returnType)
         {
-            return GetOrderReport(new OrderResponse() {OrderID = OrderID, OrderType = type}, returnType);
+            CheckInitialized();
+            return GetOrderReport(new OrderResponse() { OrderID = OrderID, OrderType = type }, returnType);
         }
 
         public OrderReport GetOrderReport(OrderResponse response, ReportReturnType returnType)
         {
+            CheckInitialized();
             var trans = GetTransactionReport(response, returnType);
             return new OrderReport()
                 {
@@ -220,11 +240,13 @@ namespace AlertSolutions.API
         /// </summary>
         public TransactionReport GetTransactionReport(string transactionID, OrderType type, ReportReturnType returnType)
         {
+            CheckInitialized();
             return GetTransactionReport(new OrderResponse() { Unqid = transactionID, OrderType = type }, returnType);
         }
 
         public TransactionReport GetTransactionReport(OrderResponse response, ReportReturnType returnType)
         {
+            CheckInitialized();
             var error = "unknown";
             var requestResult = RequestResultType.Error;
             var reportData = "";
@@ -276,11 +298,7 @@ namespace AlertSolutions.API
                     location.Append("&OrderID=");
                     location.Append(response.OrderID);
 
-                    using (var webClient = new WebClient())
-                    {
-                        reportData = webClient.UploadString(location.ToString(), "");
-                    }
-
+                    reportData = webClientProxy.UploadString(location.ToString(), "", "");
 
                     requestResult = RequestResultType.Success;
                     error = "none";
@@ -326,6 +344,7 @@ namespace AlertSolutions.API
         /// </summary>
         public bool Authenticated()
         {
+            CheckInitialized();
             try
             {
                 var response = CancelOrder(0, OrderType.EmailBroadcast);
@@ -358,11 +377,13 @@ namespace AlertSolutions.API
         /// </summary>
         public string CancelOrder(OrderResponse response)
         {
+            CheckInitialized();
             return CancelOrder(response.OrderID, response.OrderType);
         }
 
         public string CancelOrder(int orderid, OrderType type)
         {
+            CheckInitialized();
             var location = new StringBuilder();
             location.Append(_url);
             location.Append("/xml/CancelOrder.aspx?");
@@ -373,15 +394,7 @@ namespace AlertSolutions.API
 
             var xml = "<Cancels><Cancel Type=\"" + OrderTypeUtil.GetCode(type) + "\">" + orderid + "</Cancel></Cancels>";
             
-            string response;
-
-            using (var webClient = new WebClient())
-            {
-                webClient.Headers.Add("Content-Type: text/xml");
-                response = webClient.UploadString(location.ToString(), xml);
-            }
-
-            return response;
+            return webClientProxy.UploadString(location.ToString(), xml);
         }
 
         /// <summary>
@@ -389,6 +402,7 @@ namespace AlertSolutions.API
         /// </summary>
         public string GetLists(ReportReturnType returnType)
         {
+            CheckInitialized();
             var location = new StringBuilder();
             location.Append(_url);
             location.Append("/xml/lists.aspx?");
@@ -399,15 +413,7 @@ namespace AlertSolutions.API
             location.Append("&ReturnType=");
             location.Append(returnType.ToString());
 
-            string response;
-
-            using (var webClient = new WebClient())
-            {
-                webClient.Headers.Add("Content-Type: text/xml");
-                response = webClient.DownloadString(location.ToString());
-            }
-
-            return response;
+            return webClientProxy.DownloadString(location.ToString());
         }
 
         public TemplateResponse SendTemplates(Template template)
@@ -428,29 +434,25 @@ namespace AlertSolutions.API
 
             string response = "";
 
+
             try
             {
-                using (var webClient = new WebClient())
-                {
-                    webClient.Headers.Add("Content-Type: text/xml");
-                    response = webClient.UploadString(location.ToString(), xml.ToString());
-                }
-
+                response = webClientProxy.UploadString(location.ToString(), xml.ToString());
             }
             catch (WebException wex)
             {
                 status = RequestResultType.Error;
-                error = "Server Error: " + wex.ToString();
+                error = "Server Error: " + wex;
             }
             catch (TimeoutException tex)
             {
                 status = RequestResultType.Error;
-                error = "Server Error: " + tex.ToString();
+                error = "Server Error: " + tex;
             }
             catch (Exception ex)
             {
                 status = RequestResultType.Error;
-                error = "Error: " + ex.ToString();
+                error = "Error: " + ex;
             }
 
             var xmlDoc = new XmlDocument();

@@ -153,7 +153,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             var url = "http://weblaunch.blifax.com/postapi";
 
             // create the client
-            var client = new APIClient(url, user, password);
+            var client = new ApiClient(url, user, password);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("There is a pause of about 10 seconds before getting a report.");
             Console.ForegroundColor = ConsoleColor.Gray;

@@ -24,7 +24,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             var password = "";
             var url = "http://weblaunch.blifax.com/postapi";
 
-            var templateClient = new APIClient(url, user, password);
+            var templateClient = new ApiClient(url, user, password);
 
             Console.WriteLine("\nPress any key to submit template.");
             Console.ReadLine();
@@ -32,7 +32,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             TemplateResponse response = templateClient.SendTemplates(template);
 
 
-            var orderClient = new APIClient(url, user, password);
+            var orderClient = new ApiClient(url, user, password);
 
             var vb = new VoiceBroadcast();
             vb.BillCode = "APIClient Demo";

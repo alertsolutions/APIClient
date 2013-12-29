@@ -17,7 +17,7 @@ namespace AlertSolutions.APIClientExamples
         {
             Console.WriteLine("Alert Solutions API Client Test\r\n\r\n");
 
-            APIClient client = new APIClient("http://weblaunch.blifax.com/postapi", "jthomas@blimessaging.com", "pentagon625");
+            ApiClient client = new ApiClient("http://weblaunch.blifax.com/postapi", "jthomas@blimessaging.com", "pentagon625");
             List<IOrder> orders = new List<IOrder>();
 
             orders.Add(CreateET());
@@ -47,7 +47,7 @@ namespace AlertSolutions.APIClientExamples
             Console.ReadLine();
         }
 
-        public static void SendOrder(APIClient client, IOrder order)
+        public static void SendOrder(ApiClient client, IOrder order)
         {
             Console.WriteLine("Press any key to send " + order.TypeOfOrder + " order.");
             Console.WriteLine("[s] to skip...");

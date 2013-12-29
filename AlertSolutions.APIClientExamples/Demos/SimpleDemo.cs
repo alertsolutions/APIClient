@@ -42,7 +42,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             var url = "http://weblaunch.blifax.com/postapi";
 
             // create the client
-            var client = new APIClient(url, user, password);
+            var client = new ApiClient(url, user, password);
 
             Console.WriteLine("\nPress any key to launch broadcast.");
             Console.ReadLine();

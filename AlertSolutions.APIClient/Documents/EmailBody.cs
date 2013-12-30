@@ -43,7 +43,7 @@ namespace AlertSolutions.API.Documents
             return new HtmlBody("message.html", bytes);
         }
 
-        // TODO should this be turned on?
+        // TODO : should this part of PostAPI be made accessible through the client?
         //public static HtmlBody FromID(int listID)
         //{
         //    return new HtmlBody(listID);
@@ -89,7 +89,7 @@ namespace AlertSolutions.API.Documents
             return new TextBody("message.txt", bytes);
         }
 
-        // TODO should this be turned on?
+        // TODO : should this part of PostAPI be made accessible through the client?
         //public static TextBody FromID(int listID)
         //{
         //    return new TextBody(listID);

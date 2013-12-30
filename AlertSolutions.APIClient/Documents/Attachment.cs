@@ -33,7 +33,7 @@ namespace AlertSolutions.API.Documents
             return new Attachment(attachmentFileName, bytes);
         }
 
-        // TODO should this be turned on?
+        // TODO : should this part of PostAPI be made accessible through the client?
         //public static Attachment FromID(int listID)
         //{
         //    return new Attachment(listID);

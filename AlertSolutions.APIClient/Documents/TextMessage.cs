@@ -44,7 +44,7 @@ namespace AlertSolutions.API.Documents
             return textMsg;
         }
 
-        // TODO should this be turned on?
+        // TODO : should this part of PostAPI be made accessible through the client?
         //public static TextMessage FromID(int listID)
         //{
             //var textMsg = new TextMessage(listID);

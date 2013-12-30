@@ -306,7 +306,7 @@ namespace AlertSolutions.API
                     var xmlDoc = new XmlDocument();
                     xmlDoc.LoadXml(reportData);
                     //assumes there is only one of this kind of tag
-                    var xnList = xmlDoc.SelectNodes("/PostAPIResponse/SaveTransactionalOrderResult"); // TODO check what they are
+                    var xnList = xmlDoc.SelectNodes("/PostAPIResponse/SaveTransactionalOrderResult");
                     foreach (XmlNode xn in xnList)
                     {
                         try

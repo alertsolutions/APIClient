@@ -30,7 +30,9 @@ namespace AlertSolutions.API.Documents
         public static Document FromText(string documentName, string documentText)
         {
             var bytes = Encoding.UTF8.GetBytes(documentName);
-            return new Document(documentName, bytes); // todo should it be documentName, or documentText, i forget now
+            // TODO : Determine if this is a bug, and documentText should be converted to bytes,
+            // or if I had originally done this to work around some inconsistency in postAPI
+            return new Document(documentName, bytes);
         }
 
         public static Document FromByteArray(string documentName, byte[] documentData)

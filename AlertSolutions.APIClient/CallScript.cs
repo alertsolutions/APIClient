@@ -5,6 +5,7 @@ using System.Text;
 
 namespace AlertSolutions.API
 {
+    [Serializable]
     public class CallScript
     {
         private XDocument _callScript { get; set; }

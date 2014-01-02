@@ -11,6 +11,7 @@ namespace AlertSolutions.API.Documents
         List<Document> Documents { get; set; }
     }
 
+    [Serializable]
     // common code for any orders that contain a list of documents
     internal class DocumentInfo
     {

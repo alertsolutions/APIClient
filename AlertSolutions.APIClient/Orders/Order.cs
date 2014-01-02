@@ -17,7 +17,7 @@ namespace AlertSolutions.API.Orders
 
     [Serializable, 
     XmlInclude(typeof(SMSMessage)), 
-//    XmlInclude(typeof(SMSBroadcast)),
+    XmlInclude(typeof(SMSBroadcast)),
     //XmlInclude(typeof(VoiceMessage)),
     //XmlInclude(typeof(VoiceBroadcast)),
     //XmlInclude(typeof(EmailBroadcast)),

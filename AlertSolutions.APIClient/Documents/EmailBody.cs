@@ -6,8 +6,13 @@ using System.Text;
 
 namespace AlertSolutions.API.Documents
 {
+    [Serializable]
     public abstract class EmailBody : DocumentBase
     {
+        public EmailBody()
+        {
+        }
+
         internal EmailBody(string filePath) : base(filePath){}
         internal EmailBody(int fileID) : base(fileID){}
         internal EmailBody(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }
@@ -15,8 +20,13 @@ namespace AlertSolutions.API.Documents
         public abstract List<XElement> ToXml();
     }
 
+    [Serializable]
     public class HtmlBody : EmailBody
     {
+        public HtmlBody()
+        {
+        }
+
         internal HtmlBody(string filePath) : base(filePath){}
         internal HtmlBody(int fileID) : base(fileID){}
         internal HtmlBody(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }
@@ -61,8 +71,13 @@ namespace AlertSolutions.API.Documents
         }
     }
 
+    [Serializable]
     public class TextBody : EmailBody
     {
+        public TextBody()
+        {
+        }
+
         internal TextBody(string filePath) : base(filePath){}
         internal TextBody(int fileID) : base(fileID){}
         internal TextBody(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }

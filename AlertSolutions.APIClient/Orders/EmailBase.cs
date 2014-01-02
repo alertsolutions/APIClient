@@ -6,6 +6,7 @@ using AlertSolutions.API.Documents;
 
 namespace AlertSolutions.API.Orders
 {
+    [Serializable]
     // handle code common to ET and EB
     public abstract class EmailBase : Order
     {

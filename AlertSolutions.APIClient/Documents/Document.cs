@@ -10,8 +10,13 @@ namespace AlertSolutions.API.Documents
     // postAPI have lists of documents, so it has a generic name
     // This class should be thought of like a sibling to Attachments or ContactList
     // rather than something they would inherit from, which is DocumentBase
+    [Serializable]
     public class Document : DocumentBase
     {
+        public Document()
+        {
+        }
+
         internal Document(string filePath) : base(filePath){}
         internal Document(int fileID) : base(fileID){}
         internal Document(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }

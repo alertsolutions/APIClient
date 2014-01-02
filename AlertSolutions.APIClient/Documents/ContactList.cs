@@ -7,6 +7,10 @@ namespace AlertSolutions.API.Documents
     [Serializable]
     public class ContactList : DocumentBase
     {
+        public ContactList()
+        {
+        }
+
         internal ContactList(string filePath) : base(filePath) { }
         internal ContactList(int fileID) : base(fileID) { }
         internal ContactList(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }

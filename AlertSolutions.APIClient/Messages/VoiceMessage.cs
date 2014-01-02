@@ -7,6 +7,7 @@ using AlertSolutions.API.Orders;
 
 namespace AlertSolutions.API.Messages
 {
+    [Serializable]
     public class VoiceMessage : VoiceBase, IMessage
     {
         // accessors for transactional info ( goes into each class that inherits ITransactionalOrder)

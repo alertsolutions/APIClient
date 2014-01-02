@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.Serialization;
+using AlertSolutions.API.Broadcasts;
+using AlertSolutions.API.Messages;
 
 namespace AlertSolutions.API.Orders
 {
@@ -12,7 +15,16 @@ namespace AlertSolutions.API.Orders
         string ToXml();
     }
 
-    [Serializable]
+    [Serializable, 
+    XmlInclude(typeof(SMSMessage)), 
+//    XmlInclude(typeof(SMSBroadcast)),
+    //XmlInclude(typeof(VoiceMessage)),
+    //XmlInclude(typeof(VoiceBroadcast)),
+    //XmlInclude(typeof(EmailBroadcast)),
+    //XmlInclude(typeof(EmailMessage)),
+    //XmlInclude(typeof(FaxBroadcast)),
+    //XmlInclude(typeof(FaxMessage)),
+    ]
     public abstract class Order : IOrder
     {
         public DateTime SendTimeUTC { get; set; }

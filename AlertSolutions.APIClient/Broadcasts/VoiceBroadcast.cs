@@ -9,6 +9,7 @@ using AlertSolutions.API.Orders;
 
 namespace AlertSolutions.API.Broadcasts
 {
+    [Serializable]
     public class VoiceBroadcast : VoiceBase, IBroadcast
     {
         public enum VoiceThrottleType

@@ -4,6 +4,7 @@ using System.Xml.Linq;
 
 namespace AlertSolutions.API.Documents
 {
+    [Serializable]
     public class ContactList : DocumentBase
     {
         internal ContactList(string filePath) : base(filePath) { }

@@ -8,6 +8,7 @@ using AlertSolutions.API.Documents;
 namespace AlertSolutions.API.Orders
 {
     // handle code common to VT and VL
+    [Serializable]
     public abstract class VoiceBase : Order, IContainDocuments
     {
         // accessors for document info ( goes into each class that inherits IContainDocuments)

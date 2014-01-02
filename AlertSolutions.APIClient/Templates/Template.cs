@@ -5,7 +5,12 @@ using System.Xml.Linq;
 
 namespace AlertSolutions.API.Templates
 {
-    public class Template
+    public interface ITemplate
+    {
+        XElement ToXml();
+    }
+
+    public class Template : ITemplate
     {
         protected string _fileName { get; set; }
         protected byte[] _fileBinary { get; set; }

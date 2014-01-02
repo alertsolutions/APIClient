@@ -74,6 +74,6 @@ namespace AlertSolutions.API
         /// </summary>
         string GetLists(ReportReturnType returnType);
 
-        TemplateResponse SendTemplates(Template template);
+        TemplateResponse SendTemplates(ITemplate template);
     }
 }

@@ -418,7 +418,7 @@ namespace AlertSolutions.API
             return webClientProxy.DownloadString(location.ToString());
         }
 
-        public TemplateResponse SendTemplates(Template template)
+        public TemplateResponse SendTemplates(ITemplate template)
         {
             var templateId = -1;
             var error = "unknown";

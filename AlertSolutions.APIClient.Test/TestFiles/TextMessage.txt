@@ -1,1 +1,0 @@
-﻿This was sent to you phone via the Alert Solutions API Client!

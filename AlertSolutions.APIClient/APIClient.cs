@@ -91,7 +91,7 @@ namespace AlertSolutions.API
         public OrderResponse SendOrder(IOrder order)
         {
             CheckInitialized();
-            order = Utilities.OffsetOrderTimeFields(order);
+            order = Utilities.OffsetOrderTimeFieldsToEasternStandard(order);
             var xml = order.ToXml();
             return SendOrder(xml);
         }

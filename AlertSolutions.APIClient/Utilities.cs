@@ -7,7 +7,7 @@ using AlertSolutions.API.Orders;
 
 namespace AlertSolutions.API
 {
-    internal static class Utilities
+    public static class Utilities
     {
 
         internal static void StripNodeFromElement(XElement element, string nodeName)
@@ -42,7 +42,7 @@ namespace AlertSolutions.API
             return offsetTime;
         }
 
-        internal static IOrder OffsetOrderTimeFields(IOrder order)
+        public static IOrder OffsetOrderTimeFieldsToEasternStandard(IOrder order)
         {
             // convert sendtime to eastern
             // (since postAPI currently uses that instead of UTC like it should)

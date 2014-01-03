@@ -2,6 +2,7 @@
 
 namespace AlertSolutions.API
 {
+    [Serializable]
     public class OrderResponse
     {
         public int OrderID { get; set; }

@@ -79,7 +79,7 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             Assert.IsTrue(orderTag.Element("Project").Value == "PC");
             Assert.IsTrue(orderTag.Element("BillCode").Value == "BC");
             Assert.IsTrue(orderTag.Element("AutoLaunch").Value == "Yes");
-            Assert.IsTrue(DateTime.Parse(orderTag.Element("Date").Value) == DateTime.Today);
+            Assert.IsTrue(DateTime.Parse(orderTag.Element("Date").Value) == DateTime.UtcNow.Date);
             Assert.IsTrue(DateTime.Parse(orderTag.Element("Time").Value).Minute == DateTime.UtcNow.Minute);
             // 3 1 0-4 Documentation says StopTime, but I think the name changed since then.
             Assert.IsNotNull(DateTime.Parse(orderTag.Element("StopDateTime").Value));

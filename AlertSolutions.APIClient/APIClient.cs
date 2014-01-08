@@ -300,7 +300,7 @@ namespace AlertSolutions.API
                     location.Append("&OrderID=");
                     location.Append(response.OrderID);
 
-                    reportData = webClientProxy.UploadString(location.ToString(), "", "");
+                    reportData = webClientProxy.UploadString(location.ToString(), "");
 
                     requestResult = RequestResultType.Success;
                     error = "none";

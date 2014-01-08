@@ -20,6 +20,8 @@ namespace AlertSolutions.API.Messages
         {
             this.TypeOfOrder = OrderType.VoiceMessage;
             Phone = "0";
+
+            // TODO : remove these default values and force user to send them in future (already no defaults in VoiceBroadcast)
             var sendTimeLocal = DateTime.Now;
             var sendTimeUTC = sendTimeLocal.ToUniversalTime();
             StopTimeUTC = new DateTime(sendTimeUTC.Year, sendTimeUTC.Month, sendTimeUTC.Day, 23, 59, 59);

@@ -50,6 +50,10 @@ namespace AlertSolutions.API.Orders
             }
             else
             {
+                if (StopTimeUTC == DateTime.MinValue)
+                {
+                    throw new ArgumentException("StopTimeUTC is a required field.");
+                }
                 orderTag.Add(new XElement("StopDateTime", StopTimeUTC.ToString("yyyy-MM-dd HH:mm")));
             }
             orderTag.Add(new XElement("RestartTime", RestartTimeUTC.ToString("HH:mm")));

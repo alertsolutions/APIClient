@@ -37,6 +37,9 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
         public void BuildXmlWithRequiredInput()
         {
             var vb = new VoiceBroadcast();
+            vb.SendTimeUTC = DateTime.UtcNow;
+            vb.StopTimeUTC = DateTime.UtcNow.Date.AddHours(20);
+            vb.RestartTimeUTC = DateTime.UtcNow.Date.AddDays(1).AddHours(8);
             vb.List = ContactList.FromText("requiredList.csv", "phone\r\n5555555555");
             vb.Documents = new List<Document>()
             {
@@ -53,6 +56,9 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
         public void XmlOutputAllFieldsTest()
         {
             var vb = new VoiceBroadcast();
+            vb.SendTimeUTC = DateTime.UtcNow;
+            vb.StopTimeUTC = DateTime.UtcNow.Date.AddHours(20);
+            vb.StopTimeUTC = DateTime.UtcNow.Date.AddDays(1).AddHours(8);
             vb.BillCode = "BC";
             vb.ProjectCode = "PC";
             vb.CallerID = "4015555555";

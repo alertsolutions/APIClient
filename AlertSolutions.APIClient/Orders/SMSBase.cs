@@ -19,11 +19,13 @@ namespace AlertSolutions.API.Orders
         internal SMSBase()
         {
             ShortCode = "0";
+            OverType = "truncate";
+
+            // TODO : remove these default values and force user to send them in future
             var sendTimeLocal = DateTime.Now;
             SendTimeUTC = sendTimeLocal.ToUniversalTime();
             StopTimeUTC = new DateTime(sendTimeLocal.Year, sendTimeLocal.Month, sendTimeLocal.Day, 23, 59, 59).ToUniversalTime();
             RestartTimeUTC = StopTimeUTC.AddMinutes(481); // 8am the next day
-            OverType = "truncate";
         }
 
         protected override XDocument BuildXml()

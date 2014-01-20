@@ -1,0 +1,67 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="TestFast">
+	<PropertyGroup>
+		<APIClientSln>..\AlertSolutions.APIClient.sln</APIClientSln>
+		<APIClientLib>..\AlertSolutions.APIClient.Test\bin\AlertSolutions.APIClient.Test.dll</APIClientLib>
+		<TestContainers>/testcontainer:$(APIClientLib)</TestContainers>
+	</PropertyGroup>
+
+	<Target Name="BuildCI">
+		<CallTarget Targets="BuildCommon" />
+	</Target>
+
+	<Target Name="TestFast">
+		<CallTarget Targets="BuildCommon" />
+		<CallTarget Targets="TestAll" />
+	</Target>
+	
+	<Target Name="BuildCommon">
+		<CallTarget Targets="BuildAPIClient" />
+	</Target>
+
+	<Target Name="TestAll">
+		<Message Text="========= Testing All ========" />
+		<Exec Command='mstest.exe /nologo  $(TestContainers)' />
+	</Target>
+
+	<Target Name="TestAllCI">
+		<Message Text="========= Testing All ========" />
+		<Exec Command='mstest.exe /nologo  $(TestContainers) /resultsfile:TestResults.trx' />
+	</Target>
+
+	<Target Name="Coverage">
+		<Message Text="========= Testing All ========" />
+		<Exec Command='"C:\Program Files (x86)\ncover\ncover.console.exe" //onlywithsource //eas .*tests*;.*Tests*;RazorEngine.dll;Quartz.dll;Common.Logging.dll;GalaSoft.*.dll //ef ".*.Designer.cs;.*Web References.*;.*APIClient.Context.cs;.*.xaml;.*.g.cs" //x coverage.xml mstest.exe /nologo  $(TestContainers) /resultsfile:TestResults.trx' />
+	</Target>
+
+	<Target Name="CoverageReport">
+		<Exec Command='"C:\Program Files\ncover\ncover.reporting.exe" coverage.xml //or FullCoverageReport:Html //op .\coverage\ //mc BranchCoverage:6.39 //mcsc' />
+	</Target>
+	
+	<Target Name="RemoveTestResults">
+		<Exec Command='rmdir /S /Q TestResults' />
+	</Target>
+	
+	<Target Name="SimianReport">
+		<Exec Command='simian-2.3.34.exe ../src/**/*.cs -formatter=xml -excludes=**/Reference.cs -excludes=**/EBReport.cs -excludes=**/VLReport.cs -excludes=**/MLReport.cs -failOnDuplication- > simian.xml' />
+	</Target>
+	
+	<Target Name="Clean">
+		<Message Text="================= Cleaning $(APIClientSln)"></Message>
+		<PropertyGroup>
+			<OutDir>$(SolutionRoot)\Bin\</OutDir>
+		</PropertyGroup>
+		<MSBuild Projects="$(APIClientSln)" Properties='OutDir=bin\' Targets='Clean'></MSBuild>
+		<RemoveDir Directories='obj\'></RemoveDir>
+		<Exec Command='git clean -fx -d' WorkingDirectory="..\" />
+	</Target>
+	
+	<Target Name="BuildAPIClient">
+		<Message Text="================= Building $(APIClientSln)"></Message>
+		<CallTarget Targets="RemoveTestResults" />
+		<PropertyGroup>
+			<OutDir>$(SolutionRoot)\Bin\</OutDir>
+		</PropertyGroup>
+		<MSBuild Projects="$(APIClientSln)" Properties='OutDir=bin\;nowarn=1591' Targets='Rebuild'></MSBuild>
+		<RemoveDir Directories='obj\'></RemoveDir>
+	</Target>
+</Project>

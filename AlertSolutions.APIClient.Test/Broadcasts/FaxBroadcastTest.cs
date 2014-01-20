@@ -24,6 +24,20 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
         }
 
         [TestMethod]
+        public void BuildXmlWithoutRequiredInput()
+        {
+            try
+            {
+                var fb = new FaxBroadcast();
+                var xml = fb.ToXml();
+            }
+            catch (FormatException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+
+        [TestMethod]
         public void XmlOutputTest()
         {
         }

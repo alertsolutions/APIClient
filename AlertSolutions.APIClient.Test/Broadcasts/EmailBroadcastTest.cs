@@ -25,91 +25,116 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             Assert.IsNotNull(emailBroadcast);
         }
 
-        // msbuild doesn't seem to handle this attribute, so it fails testfast.bat
-        //[TestMethod, ExpectedException(typeof(FormatException))]
-        //public void BuildXmlWithoutRequiredInput()
-        //{
-        //    var eb = new EmailBroadcast();
-        //    var xml = eb.ToXml();
-        //}
+        [TestMethod]
+        public void BuildXmlWithoutRequiredInput()
+        {
+            try
+            {
+                var eb = new EmailBroadcast();
+                var xml = eb.ToXml();
+            }
+            catch (FormatException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+
+        public XDocument Parse(EmailBroadcast eb)
+        {
+            var xml = eb.ToXml();
+            Assert.IsNotNull(xml);
+            XDocument xDoc = XDocument.Parse(xml);
+            Assert.IsNotNull(xDoc);
+            return xDoc;
+        }
 
         [TestMethod]
         public void BuildXmlWithRequiredInput()
         {
             var eb = new EmailBroadcast();
             eb.TextBody = TextBody.FromText("Required content");
-            eb.List = ContactList.FromText("requiredList.csv","email\r\nsanta@northpole.com");
-            
-            var xml = eb.ToXml();
-            Assert.IsNotNull(xml);
-            XDocument xDoc = XDocument.Parse(xml);
-            Assert.IsNotNull(xDoc);
+            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+
+            Parse(eb);
         }
 
-
         [TestMethod]
-        public void XmlOutputAllFieldsTest()
+        public void XmlOutputDefaultValuesTest()
         {
             var eb = new EmailBroadcast();
-            eb.BillCode = "BC";
-            eb.ProjectCode = "PC";
-            eb.EmailSubject = "ES";
-            eb.EmailReplyTo = "ERT";
-            eb.EmailFrom = "EF";
-            eb.DisplayName = "DN";
-            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
-            eb.EmailHeader = "email";
-            // one of these must be populated, either text, html, or both
             eb.TextBody = TextBody.FromText("Required content");
-            eb.HtmlBody = HtmlBody.FromText("Required content");
+            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
             
-            var xml = eb.ToXml();
-            Assert.IsNotNull(xml);
-            XDocument xDoc = XDocument.Parse(xml);
-            Assert.IsNotNull(xDoc);
+            var xDoc = Parse(eb);
+            VerifyFieldsExist(xDoc);
+            var orderTag = xDoc.Root.Elements("Order").FirstOrDefault();
+            Assert.IsTrue(orderTag.Element("AutoLaunch").Value == "Yes");
+            //TODO : finish the rest of the default fields
+        }
+   
+        [TestMethod]
+        public void XmlOutputSetValuesTest()
+        {
+            var eb = new EmailBroadcast();
+            eb.AutoLaunch = false;
+            eb.BillCode = "BC";
+            eb.DisplayName = "DN";
+            eb.EmailFrom = "EF";
+            eb.EmailHeader = "email";
+            eb.EmailReplyTo = "ERT";
+            eb.EmailSubject = "ES";
+            eb.HtmlBody = HtmlBody.FromText("Required content <b>html</b>");
+            eb.IsForward = true;
+            eb.IsReplaceLink = true;
+            eb.IsUnsubscribe = true;
+            eb.LanguageHeader = "Dutch";
+            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+            eb.NumberOfRedials = 3;
+            eb.NumberOfResends = 2;
+            eb.ProjectCode = "PC";
+            eb.Proofs = new List<string>();
+            eb.ResendInterval = "4";
+            eb.SendTimeUTC = new DateTime(2010, 10, 12, 16, 15, 35);
+            eb.TextBody = TextBody.FromText("Required content plaintext");
 
-            // make sure the necessary email fields are there (as per postAPI documentation)
+            var xDoc = Parse(eb);
             VerifyFieldsExist(xDoc);
 
-            // make sure the necessary VALUES exist in those fields (as per postAPI documentation)
-            // TODO : make match values set in object
+            // make sure the VALUES match what was set above
             var orderTag = xDoc.Root.Elements("Order").FirstOrDefault();
             Assert.IsTrue(orderTag.FirstAttribute.Value == "EB");
-            Assert.IsNotNull(orderTag.Element("Project"));
-            Assert.IsNotNull(orderTag.Element("BillCode"));
-            Assert.IsNotNull(orderTag.Element("AutoLaunch"));
-            Assert.IsNotNull(orderTag.Element("Date"));
-            Assert.IsNotNull(orderTag.Element("Time"));
-            Assert.IsNotNull(orderTag.Element("DisplayName"));
-            Assert.IsNotNull(orderTag.Element("From"));
-            Assert.IsNotNull(orderTag.Element("ReplyTo"));
-            Assert.IsNotNull(orderTag.Element("Subject"));
-            Assert.IsNotNull(orderTag.Element("Forward"));
-            Assert.IsNotNull(orderTag.Element("ReplaceLink"));
-            Assert.IsNotNull(orderTag.Element("Unsubscribe"));
-            Assert.IsNotNull(orderTag.Element("NumberOfRedials"));
-            Assert.IsNotNull(orderTag.Element("NumberOfResends"));
+            Assert.IsTrue(orderTag.Element("AutoLaunch").Value == "No");
+            Assert.IsTrue(orderTag.Element("BillCode").Value == "BC");
+            Assert.IsTrue(orderTag.Element("Project").Value == "PC");
+            Assert.IsTrue(orderTag.Element("DisplayName").Value == "DN");
+            Assert.IsTrue(orderTag.Element("Date").Value == "2010-10-12");
+            Assert.IsTrue(orderTag.Element("Time").Value == "16:15");
+            Assert.IsTrue(orderTag.Element("From").Value == "EF");
+            Assert.IsTrue(orderTag.Element("ReplyTo").Value == "ERT");
+            Assert.IsTrue(orderTag.Element("Subject").Value == "ES");
+            Assert.IsTrue(orderTag.Element("Forward").Value == "Yes");
+            Assert.IsTrue(orderTag.Element("ReplaceLink").Value == "Yes");
+            Assert.IsTrue(orderTag.Element("Unsubscribe").Value == "Yes");
+            Assert.IsTrue(orderTag.Element("LanguageHeader").Value == "Dutch");
+            Assert.IsTrue(orderTag.Element("NumberOfRedials").Value == "3");
+            Assert.IsTrue(orderTag.Element("NumberOfResends").Value == "2");
 
             // TODO : make tests for these conditional fields and their output
             // conditionals
-            Assert.IsNotNull(orderTag.Element("ResendInterval"));
-            Assert.IsNotNull(orderTag.Element("ListID"));
-            Assert.IsNotNull(orderTag.Element("ListName"));
-            Assert.IsNotNull(orderTag.Element("ListBinary"));
-            Assert.IsNotNull(orderTag.Element("EmailField")); // header <- what happens when not set?
+            Assert.IsTrue(orderTag.Element("ResendInterval").Value == "4");
+            Assert.IsTrue(orderTag.Element("ListID").Value == "");
+            Assert.IsTrue(orderTag.Element("ListName").Value == "requiredList.csv");
+            Assert.IsTrue(Encoding.UTF8.GetString(Convert.FromBase64String(orderTag.Element("ListBinary").Value)) == "email\r\nsanta@northpole.com");
+            Assert.IsTrue(orderTag.Element("EmailField").Value == "email"); // header <- what happens when not set?
 
             // documents
-            Assert.IsNotNull(orderTag.Element("HtmlID"));
-            Assert.IsNotNull(orderTag.Element("HtmlFile"));
-            Assert.IsNotNull(orderTag.Element("HtmlBinary"));
-            Assert.IsNotNull(orderTag.Element("TextID"));
-            Assert.IsNotNull(orderTag.Element("TextFile"));
-            Assert.IsNotNull(orderTag.Element("TextBinary"));
+            Assert.IsTrue(orderTag.Element("HtmlID").Value == "");
+            Assert.IsNotNull(orderTag.Element("HtmlFile").Value);
+            Assert.IsTrue(Encoding.UTF8.GetString(Convert.FromBase64String(orderTag.Element("HtmlBinary").Value)) == "Required content <b>html</b>");
+            Assert.IsTrue(orderTag.Element("TextID").Value == "");
+            Assert.IsNotNull(orderTag.Element("TextFile").Value);
+            Assert.IsTrue(Encoding.UTF8.GetString(Convert.FromBase64String(orderTag.Element("TextBinary").Value)) == "Required content plaintext");
 
-            // lists
-            Assert.IsNotNull(orderTag.Element("Proofs").Elements("Proof").Any());
-            Assert.IsNotNull(orderTag.Element("Attachments"));
-            Assert.IsTrue(orderTag.Element("Attachments").Elements().Any());
         }
 
         public void VerifyFieldsExist(XDocument orderXml)

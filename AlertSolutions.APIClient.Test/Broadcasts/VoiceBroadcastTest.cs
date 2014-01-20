@@ -25,13 +25,23 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             Assert.IsNotNull(voiceBroadcast);
         }
 
-        // msbuild doesn't seem to handle this attribute, so it fails testfast.bat
-        //[TestMethod, ExpectedException(typeof(FormatException))]
-        //public void BuildXmlWithoutRequiredInput()
-        //{
-        //    var vb = new VoiceBroadcast();
-        //    var xml = vb.ToXml();
-        //}
+        [TestMethod]
+        public void BuildXmlWithoutRequiredInput()
+        {
+            try
+            {
+                var vb = new VoiceBroadcast();
+                var xml = vb.ToXml();
+            }
+            catch (FormatException)
+            {
+                Assert.IsTrue(true);
+            }
+            catch (ArgumentException)
+            {
+                Assert.IsTrue(true);
+            }
+        }
 
         [TestMethod]
         public void BuildXmlWithRequiredInput()

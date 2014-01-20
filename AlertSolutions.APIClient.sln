@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertSolutions.APIClientExamples", "AlertSolutions.APIClientExamples\AlertSolutions.APIClientExamples.csproj", "{8CA5DC21-84FA-4645-B28F-76203E9E796B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertSolutions.APIClient", "AlertSolutions.APIClient\AlertSolutions.APIClient.csproj", "{8B61D3A6-83ED-44FD-A973-E998F2DE05FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertSolutions.APIClientTests", "AlertSolutions.APIClientTests\AlertSolutions.APIClientTests.csproj", "{050E25DC-04DA-4F27-B980-A4062D8CD75C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertSolutions.APIClient.Test", "AlertSolutions.APIClient.Test\AlertSolutions.APIClient.Test.csproj", "{1A74C968-B82A-4EF0-A108-E435855E5213}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,16 @@ Global
 		{050E25DC-04DA-4F27-B980-A4062D8CD75C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{050E25DC-04DA-4F27-B980-A4062D8CD75C}.Release|x86.ActiveCfg = Release|x86
 		{050E25DC-04DA-4F27-B980-A4062D8CD75C}.Release|x86.Build.0 = Release|x86
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1A74C968-B82A-4EF0-A108-E435855E5213}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

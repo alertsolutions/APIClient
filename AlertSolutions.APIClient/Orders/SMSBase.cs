@@ -39,7 +39,7 @@ namespace AlertSolutions.API.Orders
             var orderTag = xmlDoc.Element("Orders").Element("Order");
 
             orderTag.Add(new XElement("ShortCode", ShortCode));
-            orderTag.Add(new XElement("StopTime", StopTimeUTC.ToString("HH:mm")));
+            orderTag.Add(new XElement("StopDateTime", StopTimeUTC.ToString("yyyy-MM-dd HH:mm")));
             orderTag.Add(new XElement("RestartTime", RestartTimeUTC.ToString("HH:mm")));
             orderTag.Add(new XElement("OverType", OverType));
 

@@ -33,12 +33,14 @@ namespace AlertSolutions.APIClient.Test.Messages
             sm.Number = "5086128160";
             sm.ShortCode = "77811";
             sm.TextMessage = TextMessage.FromText(smsText);
+            sm.StopTimeUTC = DateTime.UtcNow.AddDays(1);
             Assert.IsNotNull(sm);
             string xml = sm.ToXml();
             Assert.IsNotNull(xml);
             Assert.IsTrue(xml.Contains("<ShortCode>77811</ShortCode>"));
             Assert.AreEqual("5086128160", sm.Number);
             Assert.AreEqual("77811", sm.ShortCode);
+            Assert.IsTrue(xml.Contains("<StopDateTime>" + DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd HH:mm") + "</StopDateTime>"));
         }
 
         [TestMethod]

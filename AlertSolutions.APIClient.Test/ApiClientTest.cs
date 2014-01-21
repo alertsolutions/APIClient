@@ -11,6 +11,7 @@ using AlertSolutions.API.Orders;
 using AlertSolutions.API.Templates;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using ServiceStack;
 
 namespace AlertSolutions.APIClient.Test
 {

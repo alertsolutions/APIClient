@@ -16,9 +16,10 @@ namespace AlertSolutions.API.Broadcasts
         public string ProjectCode { get { return _broadcastInfo.ProjectCode; } set { _broadcastInfo.ProjectCode = value; } }
         public ContactList List { get { return _broadcastInfo.Contacts; } set { _broadcastInfo.Contacts = value; } }
         public bool AutoLaunch { get { return _broadcastInfo.AutoLaunch; } set { _broadcastInfo.AutoLaunch = value; } }
-        
 
         //fields
+        public bool Dedup { get; set; }
+        public string DedupField { get; set; }
         public bool Restart { get; set; } 
         public string SMSHeader { get; set; }
         public string LanguageHeader { get; set; }
@@ -31,6 +32,8 @@ namespace AlertSolutions.API.Broadcasts
 
         public SMSBroadcast()
         {
+            this.Dedup = true;
+            this.DedupField = "";
             this.TypeOfOrder = OrderType.SMSBroadcast;
             this.Restart = false;        
             this.SMSHeader = "";
@@ -42,6 +45,10 @@ namespace AlertSolutions.API.Broadcasts
         {
             var xmlDoc = base.BuildXml();
             var orderTag = xmlDoc.Element("Orders").Element("Order");
+
+            orderTag.Add(new XElement("Dedup", Dedup ? "Yes" : "No"));
+            if(!string.IsNullOrEmpty(DedupField))
+                orderTag.Add(new XElement("DedupField", DedupField));
 
             orderTag.Add(new XElement("Restart", Restart ? "Yes" : "No"));
             orderTag.Add(new XElement("SMSHeader", SMSHeader));

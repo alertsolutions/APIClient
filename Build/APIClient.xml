@@ -30,7 +30,7 @@
 
 	<Target Name="Coverage">
 		<Message Text="========= Testing All ========" />
-		<Exec Command='"C:\Program Files (x86)\ncover\ncover.console.exe" //onlywithsource //eas .*tests*;.*Tests*;RazorEngine.dll;Quartz.dll;Common.Logging.dll;GalaSoft.*.dll //ef ".*.Designer.cs;.*Web References.*;.*APIClient.Context.cs;.*.xaml;.*.g.cs" //x coverage.xml mstest.exe /nologo  $(TestContainers) /resultsfile:TestResults.trx' />
+		<Exec Command='"C:\Program Files (x86)\ncover\ncover.console.exe" //coverall //onlywithsource //eas .*tests*;.*Tests*;RazorEngine.dll;Quartz.dll;Common.Logging.dll;GalaSoft.*.dll //ef ".*.Designer.cs;.*Web References.*;.*APIClient.Context.cs;.*.xaml;.*.g.cs" //x coverage.xml mstest.exe /nologo  $(TestContainers) /resultsfile:TestResults.trx' />
 	</Target>
 
 	<Target Name="CoverageReport">

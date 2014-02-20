@@ -23,6 +23,9 @@ namespace AlertSolutions.API.Broadcasts
         public string ResendInterval { get; set; }
         public string EmailHeader { get; set; }
         public string LanguageHeader { get; set; }
+        public bool Dedup { get; set; }
+        public string DedupField { get; set; }
+
         private List<string> _proofs;
         public List<string> Proofs
         {
@@ -60,6 +63,9 @@ namespace AlertSolutions.API.Broadcasts
             orderTag.Add(new XElement("Forward", IsForward ? "Yes" : "No"));
             orderTag.Add(new XElement("ReplaceLink", IsReplaceLink ? "Yes" : "No"));
             orderTag.Add(new XElement("Unsubscribe", IsUnsubscribe ? "Yes" : "No"));
+            orderTag.Add(new XElement("Dedup", Dedup ? "Yes" : "No"));
+            if (!string.IsNullOrEmpty(DedupField))
+                orderTag.Add(new XElement("DedupField", DedupField));
 
             orderTag.Add(GetProofs());
 

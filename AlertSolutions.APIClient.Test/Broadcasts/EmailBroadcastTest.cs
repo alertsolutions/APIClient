@@ -237,6 +237,26 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             Assert.IsTrue(attachmentTag3.Element("AttachmentBinary").Value == Convert.ToBase64String(Encoding.UTF8.GetBytes("content #3")));
         }
 
+        [TestMethod]
+        public void XmlOutputDedupFieldTest()
+        {
+            EmailBroadcast email = new EmailBroadcast();
+            email.TextBody = TextBody.FromText("Required content");
+            email.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+            email.Dedup = true;
+            email.DedupField = "Id";
+
+            var xml = email.ToXml();
+            XDocument xDoc = XDocument.Parse(xml);
+            var orderTag = xDoc.Root.Element("Order");
+            var dedupTag = orderTag.Element("Dedup");
+            var dedupFieldTag = orderTag.Element("DedupField");
+            Assert.IsNotNull(dedupTag);
+            Assert.AreEqual("Yes", dedupTag.Value);
+            Assert.IsNotNull(dedupFieldTag);
+            Assert.AreEqual("Id", dedupFieldTag.Value);
+        }
+
 
         [TestMethod,Ignore]
         public void SerializeTest()

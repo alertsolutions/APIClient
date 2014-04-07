@@ -11,7 +11,6 @@ using AlertSolutions.API.Orders;
 using AlertSolutions.API.Templates;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using ServiceStack;
 
 namespace AlertSolutions.APIClient.Test
 {
@@ -67,7 +66,7 @@ namespace AlertSolutions.APIClient.Test
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(
                     () => { return "some result"; });
-            ApiClientResolver.Instance.Container.Register(mockWebClientProxy.Object);
+            ApiClientResolver.Instance.Container.Register<IWebClientProxy>(delegate { return mockWebClientProxy.Object; });
             ApiClient apiClient = new ApiClient();
             apiClient.Initialize("blah", "user", "password");
             string lists = apiClient.GetLists(ReportReturnType.XML);
@@ -81,7 +80,7 @@ namespace AlertSolutions.APIClient.Test
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(
                     () => { return "some result"; });
-            ApiClientResolver.Instance.Container.Register(mockWebClientProxy.Object);
+            ApiClientResolver.Instance.Container.Register<IWebClientProxy>(delegate { return mockWebClientProxy.Object; });
             ApiClient apiClient = new ApiClient();
             apiClient.Initialize("blah", "user", "password");
             string retval = apiClient.CancelOrder(new OrderResponse{OrderID = 1, OrderType = OrderType.EmailBroadcast});
@@ -95,7 +94,7 @@ namespace AlertSolutions.APIClient.Test
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(
                     () => { return "<PostAPIResponse><SaveTransactionalOrderResult><OrderID>12345</OrderID></SaveTransactionalOrderResult></PostAPIResponse>"; });
-            ApiClientResolver.Instance.Container.Register(mockWebClientProxy.Object);
+            ApiClientResolver.Instance.Container.Register<IWebClientProxy>(delegate { return mockWebClientProxy.Object; });
 
             var mockBroadcast = new Mock<IBroadcast>();
             mockBroadcast.Setup(x => x.ToXml()).Returns("<Orders><Order Type='EB'></Order></Orders>");
@@ -114,7 +113,7 @@ namespace AlertSolutions.APIClient.Test
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(
                     () => { return "<PostAPIResponse><SaveTransactionalOrderResult><OrderID>12345</OrderID><transactionID>transactionId</transactionID></SaveTransactionalOrderResult></PostAPIResponse>"; });
-            ApiClientResolver.Instance.Container.Register(mockWebClientProxy.Object);
+            ApiClientResolver.Instance.Container.Register<IWebClientProxy>(delegate { return mockWebClientProxy.Object; });
 
             var mockMessage = new Mock<IMessage>();
             mockMessage.Setup(x => x.ToXml()).Returns("<Orders><Order Type='ET'></Order></Orders>");
@@ -134,7 +133,7 @@ namespace AlertSolutions.APIClient.Test
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(
                     () => { return "<Templates><TemplateID>123</TemplateID></Templates>"; });
-            ApiClientResolver.Instance.Container.Register(mockWebClientProxy.Object);
+            ApiClientResolver.Instance.Container.Register<IWebClientProxy>(delegate { return mockWebClientProxy.Object; });
 
             var mockMessage = new Mock<ITemplate>();
             mockMessage.Setup(x => x.ToXml()).Returns(XElement.Parse("<Templates><Template><FileName>template.html</FileName><FileBinary>fakefilebinary</FileBinary></Template></Templates>"));
@@ -152,7 +151,7 @@ namespace AlertSolutions.APIClient.Test
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(
                     () => { return "<PostAPIResponse><SaveTransactionalOrderResult><status>status</status></SaveTransactionalOrderResult></PostAPIResponse>"; });
-            ApiClientResolver.Instance.Container.Register(mockWebClientProxy.Object);
+            ApiClientResolver.Instance.Container.Register<IWebClientProxy>(delegate { return mockWebClientProxy.Object; });
 
             ApiClient apiClient = new ApiClient("url", "user", "password");
             OrderReport response = apiClient.GetOrderReport(12345, OrderType.EmailBroadcast, ReportReturnType.XML);
@@ -170,7 +169,7 @@ namespace AlertSolutions.APIClient.Test
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(
                     () => { return "<PostAPIResponse><SaveTransactionalOrderResult><status>status</status></SaveTransactionalOrderResult></PostAPIResponse>"; });
-            ApiClientResolver.Instance.Container.Register(mockWebClientProxy.Object);
+            ApiClientResolver.Instance.Container.Register<IWebClientProxy>(delegate { return mockWebClientProxy.Object; });
 
             ApiClient apiClient = new ApiClient("url", "user", "password");
             TransactionReport response = apiClient.GetTransactionReport("transactionid", OrderType.EmailMessage, ReportReturnType.XML);

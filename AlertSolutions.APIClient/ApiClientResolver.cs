@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Funq;
-using ServiceStack;
 
 namespace AlertSolutions.API
 {
@@ -34,7 +32,7 @@ namespace AlertSolutions.API
 
         public void Register(Container container)
         {
-            container.RegisterAutoWiredAs<WebClientProxy, IWebClientProxy>().ReusedWithin(ReuseScope.Request);
+            container.Register<IWebClientProxy>(delegate { return new WebClientProxy(); });
         }
 
         public void Reset()

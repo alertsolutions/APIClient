@@ -19,8 +19,8 @@ namespace AlertSolutions.API.Orders
         public bool IsReplaceLink { get; set; }
         public bool IsUnsubscribe { get; set; }
 
-        public TextBody TextBody { get; set; }
-        public HtmlBody HtmlBody { get; set; }
+        public EmailText TextBody { get; set; }
+        public EmailHtml HtmlBody { get; set; }
 
         private List<Attachment> _attachments;
         public List<Attachment> Attachments
@@ -56,13 +56,13 @@ namespace AlertSolutions.API.Orders
             orderTag.Add(GetAttachmentsAsElement());
 
 
-            var htmlElements = HtmlBody == null ? HtmlBody.EmptyTagsToXml() : HtmlBody.ToXml();
+            List<XElement> htmlElements = HtmlBody == null ? new EmailHtml().EmptyTagsToXml() : HtmlBody.ToXml();
             foreach (var el in htmlElements)
             {
                 orderTag.Add(el);
             }
 
-            var textElements = TextBody == null ? TextBody.EmptyTagsToXml() : TextBody.ToXml();
+            List<XElement> textElements = TextBody == null ? new EmailHtml().EmptyTagsToXml() : TextBody.ToXml();
             foreach (var el in textElements)
             {
                 orderTag.Add(el);

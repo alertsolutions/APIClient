@@ -13,15 +13,16 @@ namespace AlertSolutions.API.Documents
         internal string EmailHtmlName { get; set; }
         internal byte[] EmailHtmlBinary { get; set; }
 
-        internal XElement ToXml()
+        internal List<XElement> ToXml()
         {
-            return new DocumentElementBuilder().ToXml("Html", EmailHtmlID, EmailHtmlName, EmailHtmlBinary, "ID", "File");
+            var xml = new DocumentElementBuilder().ToXml("Html", EmailHtmlID, EmailHtmlName, EmailHtmlBinary, "ID", "File");
+            return xml.Elements().ToList();
         }
 
         internal List<XElement> EmptyTagsToXml()
         {
-            var textXml = new DocumentElementBuilder().EmptyTagsToXml("Text", "ID", "File", "Binary");
-            return textXml.Elements().ToList();
+            var xml = new DocumentElementBuilder().EmptyTagsToXml("Text", "ID", "File", "Binary");
+            return xml.Elements().ToList();
         }
     }
 }

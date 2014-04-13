@@ -9,14 +9,9 @@ namespace AlertSolutions.API.Orders
 {
     // handle code common to VT and VL
     [Serializable]
-    public abstract class VoiceBase : Order, IContainDocuments
+    public abstract class VoiceBase : Order
     {
-        // accessors for document info ( goes into each class that inherits IContainDocuments)
-        private DocumentInfo _documentInfo = new DocumentInfo();
-        public List<Document> Documents {
-            get { return _documentInfo.Documents; } 
-            set { _documentInfo.Documents = value; } 
-        }
+        public List<VoiceDocument> Documents { get; set; }
 
         public string CallerID { get; set; }
         public DateTime StopTimeUTC { get; set; }
@@ -69,14 +64,12 @@ namespace AlertSolutions.API.Orders
                 orderTag.Add(el);
             }
 
-            var voiceDocs = _documentInfo.Documents.FindAll(s => s.GetType() == typeof(VoiceDocument));
+            if (Documents.Count < 1)
+                throw new FormatException("Must have at least one voice document.");
 
-            if(_documentInfo.Documents.Count != voiceDocs.Count)
-            {
-                throw new FormatException("Must only use a voice document for a voice order.");
-            }
-
-            orderTag.Add(_documentInfo.GetDocuments());
+            var xDocs = new XElement("Documents");
+            Documents.ForEach(doc => xDocs.Add(doc.ToXml()));
+            orderTag.Add(xDocs);
 
             return xmlDoc;
         }

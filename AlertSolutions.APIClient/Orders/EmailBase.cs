@@ -62,7 +62,7 @@ namespace AlertSolutions.API.Orders
                 orderTag.Add(el);
             }
 
-            List<XElement> textElements = TextBody == null ? new EmailHtml().EmptyTagsToXml() : TextBody.ToXml();
+            List<XElement> textElements = TextBody == null ? new EmailText().EmptyTagsToXml() : TextBody.ToXml();
             foreach (var el in textElements)
             {
                 orderTag.Add(el);

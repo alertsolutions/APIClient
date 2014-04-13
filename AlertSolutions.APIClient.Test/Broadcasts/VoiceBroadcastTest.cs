@@ -51,9 +51,9 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             vb.StopTimeUTC = DateTime.UtcNow.Date.AddHours(20);
             vb.RestartTimeUTC = DateTime.UtcNow.Date.AddDays(1).AddHours(8);
             vb.List = new ContactListBuilder().FromText("requiredList.csv", "phone\r\n5555555555");
-            vb.Documents = new List<Document>()
+            vb.Documents = new List<VoiceDocument>()
             {
-                VoiceDocument.FromText("live01.txt", "this is a live voice call.", VoiceDocumentType.Live),
+                new VoiceDocumentBuilder().FromText("live01.txt", "this is a live voice call.", VoiceDocumentType.Live),
             };
 
             var xml = vb.ToXml();
@@ -76,9 +76,9 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             vb.ThrottleNumber = 2;
             vb.List = new ContactListBuilder().FromText("requiredList.csv", "phone\r\n5555555555");
             vb.VoiceHeader = "phone";
-            vb.Documents = new List<Document>()
+            vb.Documents = new List<VoiceDocument>()
             {
-                VoiceDocument.FromText("live01.txt", "this is a live voice call.", VoiceDocumentType.Live),
+                new VoiceDocumentBuilder().FromText("live01.txt", "this is a live voice call.", VoiceDocumentType.Live),
             };
 
             var xml = vb.ToXml();
@@ -184,7 +184,7 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
                 DisplayName = "jt",
                 EmailSubject = "test email message",
                 SendTimeUTC = DateTime.UtcNow,
-                TextBody = TextBody.FromText("This is a test email")
+                TextBody = new EmailTextBuilder().FromText("This is a test email")
             };
 
             StringBuilder sb = new StringBuilder();

@@ -21,7 +21,7 @@ namespace AlertSolutions.API.Documents
 
         internal List<XElement> EmptyTagsToXml()
         {
-            var xml = new DocumentElementBuilder().EmptyTagsToXml("Text", "ID", "File", "Binary");
+            var xml = new DocumentElementBuilder().EmptyTagsToXml("Html", "ID", "File", "Binary");
             return xml.Elements().ToList();
         }
     }

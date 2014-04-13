@@ -35,8 +35,8 @@ namespace AlertSolutions.APIClientExamples.Demos
             eb.EmailHeader = "email";
             eb.Proofs = new List<string>() { "example@alertsolutions.com" };
             // can use either Text or HTML
-            eb.HtmlBody = HtmlBody.FromFile("Files\\Email.html");
-            eb.TextBody = TextBody.FromFile("Files\\Email.txt");
+            eb.HtmlBody = new EmailHtmlBuilder().FromFile("Files\\Email.html");
+            eb.TextBody = new EmailTextBuilder().FromFile("Files\\Email.txt");
 
             broadcasts.Add(eb);
 
@@ -45,7 +45,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             sb.BillCode = "APIClient Demo";
             sb.ProjectCode = "APIClient Demo";
             sb.ShortCode = "77811";
-            sb.TextMessage = TextMessage.FromFile("Files\\TextMessage.txt");
+            sb.TextMessage = new TextMessageBuilder().FromFile("Files\\TextMessage.txt");
             sb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             sb.SMSHeader = "phone";
             sb.Proofs = new List<string>() { "5555555555" };
@@ -64,10 +64,10 @@ namespace AlertSolutions.APIClientExamples.Demos
             // can be told to load an xml file, or be given the xml as text
             //vt.CallScript = CallScript.FromString("");
             //vt.CallScript = CallScript.FromFile("");
-            vb.Documents = new List<Document>()
+            vb.Documents = new List<VoiceDocument>()
             { 
                 //VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Live),
-                VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),  
+                new VoiceDocumentBuilder().FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),  
             };
 
             broadcasts.Add(vb);
@@ -81,9 +81,9 @@ namespace AlertSolutions.APIClientExamples.Demos
             fb.FaxHeader = "faxnumber";
             fb.Dedup = true;
             fb.DocumentStyle = "Letter";
-            fb.Documents = new List<Document>()
+            fb.Documents = new List<FaxDocument>()
             { 
-                Document.FromFile("Files\\FaxText.txt"),
+                new FaxDocumentBuilder().FromFile("Files\\FaxText.txt"),
             };
 
             broadcasts.Add(fb);
@@ -103,7 +103,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             em.EmailReplyTo = "example@alertsolutions.com";
             em.Attachments = new List<Attachment>() { new AttachmentBuilder().FromFile("Files\\Attachment.txt") };
             // can use either Text or HTML
-            em.TextBody = TextBody.FromFile("Files\\Email.txt");
+            em.TextBody = new EmailTextBuilder().FromFile("Files\\Email.txt");
             //em.EmailBody = HtmlBody.FromFile("Files\\Email.html");
 
             messages.Add(em);
@@ -112,7 +112,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             var sm = new SMSMessage();
             sm.Number = "5555555555";
             sm.ShortCode = "77811"; // shared Alert Solutions Shortcode
-            sm.TextMessage = TextMessage.FromFile("Files\\TextMessage.txt");
+            sm.TextMessage = new TextMessageBuilder().FromFile("Files\\TextMessage.txt");
 
             messages.Add(sm);
 
@@ -122,10 +122,10 @@ namespace AlertSolutions.APIClientExamples.Demos
             //vt.CallScript = CallScript.FromFile("");
             vm.Phone = "5555555555";
             vm.CallerID = "5555555555";
-            vm.Documents = new List<Document>()
+            vm.Documents = new List<VoiceDocument>()
             { 
-                VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Live),
-                VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),
+                new VoiceDocumentBuilder().FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Live),
+                new VoiceDocumentBuilder().FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),
             };
 
             messages.Add(vm);
@@ -135,9 +135,9 @@ namespace AlertSolutions.APIClientExamples.Demos
             fm.FaxFrom = "john doe";
             fm.FaxNumber = "4014271405";
             fm.DocumentStyle = "Letter";
-            fm.Documents = new List<Document>()
+            fm.Documents = new List<FaxDocument>()
             { 
-                Document.FromFile("Files\\FaxText.txt"),
+                new FaxDocumentBuilder().FromFile("Files\\FaxText.txt"),
             };
 
             messages.Add(fm);

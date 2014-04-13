@@ -12,6 +12,7 @@ namespace AlertSolutions.API.Documents
         CallScript,
     }
 
+    [Serializable]
     public class VoiceDocument
     {
         internal int VoiceDocumentID { get; set; }

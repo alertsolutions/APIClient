@@ -64,6 +64,10 @@ namespace AlertSolutions.API.Orders
                 orderTag.Add(el);
             }
 
+
+            if(Documents == null)
+                Documents = new List<VoiceDocument>();
+
             if (Documents.Count < 1)
                 throw new FormatException("Must have at least one voice document.");
 

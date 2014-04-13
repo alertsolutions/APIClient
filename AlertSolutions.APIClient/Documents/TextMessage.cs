@@ -15,7 +15,7 @@ namespace AlertSolutions.API.Documents
 
         public List<XElement> ToXml()
         {
-            var messageXml = new DocumentElementBuilder().ToXml("Message", MessageID, Message, null, "ID", "", "File");
+            var messageXml = new DocumentElementBuilder().ToXml("Message", MessageID, Message, new byte[0], "ID", "", "File");
 
             // only actually setting the <message> tag whether the user gets it from string or file
             Utilities.StripNodeFromElement(messageXml, "MessageFile");

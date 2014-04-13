@@ -99,8 +99,8 @@ namespace AlertSolutions.APIClientExamples
             et.EmailFrom = "jthomas@blimessaging.com";
             et.DisplayName = "JThomas from AlertSolutions";
             et.Attachments = new List<Attachment>() { new AttachmentBuilder().FromFile("TestFiles\\Attachment.txt") };
-            et.TextBody = TextBody.FromFile("TestFiles\\Email.txt");
-            et.HtmlBody = HtmlBody.FromFile("TestFiles\\Email.html");
+            et.TextBody = new EmailTextBuilder().FromFile("TestFiles\\Email.txt");
+            et.HtmlBody = new EmailHtmlBuilder().FromFile("TestFiles\\Email.html");
             return et;
         }
 
@@ -118,8 +118,8 @@ namespace AlertSolutions.APIClientExamples
             eb.DisplayName = "JThomas from AlertSolutions";
             //eb.Attachments = new List<Attachment>() { Attachment.FromBase64String("file.pdf",b) };
             eb.Attachments = new List<Attachment>() { new AttachmentBuilder().FromText("file.txt", "This is a test message attachment.") };
-            eb.TextBody = TextBody.FromFile("TestFiles\\Email.txt");
-            eb.HtmlBody = HtmlBody.FromFile("TestFiles\\Email.html");
+            eb.TextBody = new EmailTextBuilder().FromFile("TestFiles\\Email.txt");
+            eb.HtmlBody = new EmailHtmlBuilder().FromFile("TestFiles\\Email.html");
             eb.List = new ContactListBuilder().FromFile("TestFiles\\ContactList.csv");
             eb.EmailHeader = "email";
             eb.Proofs = new List<string>() { "jthomas@blimessaging.com" };
@@ -133,7 +133,7 @@ namespace AlertSolutions.APIClientExamples
             //mt.Number = 4013002095;
             mt.ShortCode = "77811";
             //mt.TextMessage = TextMessage.FromString("This is not in base 64!");
-            mt.TextMessage = TextMessage.FromFile("TestFiles\\TextMessage.txt");
+            mt.TextMessage = new TextMessageBuilder().FromFile("TestFiles\\TextMessage.txt");
             return mt;
         }
         public static IOrder CreateML()
@@ -142,7 +142,7 @@ namespace AlertSolutions.APIClientExamples
             ml.BillCode = "PostAPIClient Refactor Test";
             ml.ProjectCode = "PostAPIClient Refactor Test";
             ml.ShortCode = "77811";
-            ml.TextMessage = TextMessage.FromFile("TestFiles\\TextMessage.txt");
+            ml.TextMessage = new TextMessageBuilder().FromFile("TestFiles\\TextMessage.txt");
             ml.List = new ContactListBuilder().FromFile("TestFiles\\ContactList.csv");
             ml.SMSHeader = "phone";
             ml.Proofs = new List<string>() { "4013002095" };
@@ -156,10 +156,10 @@ namespace AlertSolutions.APIClientExamples
             vt.Phone = "4013002095";
             vt.CallerID = "4015555555";
             vt.StopTimeUTC = DateTime.UtcNow;
-            vt.Documents = new List<Document>()
+            vt.Documents = new List<VoiceDocument>()
             { 
-                VoiceDocument.FromFile("TestFiles\\VoiceMessage.txt", VoiceDocumentType.Live),
-                VoiceDocument.FromFile("TestFiles\\VoiceMessage.txt", VoiceDocumentType.Message),
+                new VoiceDocumentBuilder().FromFile("TestFiles\\VoiceMessage.txt", VoiceDocumentType.Live),
+                new VoiceDocumentBuilder().FromFile("TestFiles\\VoiceMessage.txt", VoiceDocumentType.Message),
             }; 
             return vt;
         }
@@ -175,10 +175,10 @@ namespace AlertSolutions.APIClientExamples
             vl.VoiceHeader = "phone";
             vl.ThrottleType = VoiceBroadcast.VoiceThrottleType.MaximumCalls;
             vl.ThrottleNumber = 2;
-            vl.Documents = new List<Document>()
+            vl.Documents = new List<VoiceDocument>()
             { 
-                VoiceDocument.FromFile("TestFiles\\VoiceMessage.txt", VoiceDocumentType.Live),
-                VoiceDocument.FromFile("TestFiles\\VoiceMessage.txt", VoiceDocumentType.Message),  
+                new VoiceDocumentBuilder().FromFile("TestFiles\\VoiceMessage.txt", VoiceDocumentType.Live),
+                new VoiceDocumentBuilder().FromFile("TestFiles\\VoiceMessage.txt", VoiceDocumentType.Message),  
             };
             return vl;
         }
@@ -188,9 +188,9 @@ namespace AlertSolutions.APIClientExamples
             tl.FaxFrom = "james";
             tl.FaxNumber = "4013002095";
             tl.DocumentStyle = "Letter";
-            tl.Documents = new List<Document>()
+            tl.Documents = new List<FaxDocument>()
             { 
-                Document.FromFile("TestFiles\\FaxText.txt"),
+                new FaxDocumentBuilder().FromFile("TestFiles\\FaxText.txt"),
             };
             return tl;
         }
@@ -204,9 +204,9 @@ namespace AlertSolutions.APIClientExamples
             wl.FaxHeader = "faxnumber";
             wl.Dedup = true;
             wl.DocumentStyle = "Letter";
-            wl.Documents = new List<Document>()
+            wl.Documents = new List<FaxDocument>()
             { 
-                Document.FromFile("TestFiles\\FaxText.txt"),
+                new FaxDocumentBuilder().FromFile("TestFiles\\FaxText.txt"),
             };
             return wl;
         }

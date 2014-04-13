@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-
+using System.Xml.Serialization;
 using AlertSolutions.API.Documents;
 
 namespace AlertSolutions.API.Orders
 {
-    // handle code common to MT and M
+    // handle code common to MT and ML
     [Serializable]
     public abstract class SMSBase : Order
     {
@@ -14,6 +14,7 @@ namespace AlertSolutions.API.Orders
         public DateTime StopTimeUTC { get; set; }
         public DateTime RestartTimeUTC { get; set; }
         public string OverType { get; set; }
+        [XmlElement]
         public TextMessage TextMessage { get; set; }
 
         internal SMSBase()
@@ -21,7 +22,7 @@ namespace AlertSolutions.API.Orders
             ShortCode = "0";
             OverType = "truncate";
 
-            // TODO : remove these default values and force user to send them in future
+            // TODO : remove these default values and force user to set them in future
             var sendTimeLocal = DateTime.Now;
             SendTimeUTC = sendTimeLocal.ToUniversalTime();
             StopTimeUTC = new DateTime(sendTimeLocal.Year, sendTimeLocal.Month, sendTimeLocal.Day, 23, 59, 59).ToUniversalTime();
@@ -42,8 +43,6 @@ namespace AlertSolutions.API.Orders
             orderTag.Add(new XElement("StopDateTime", StopTimeUTC.ToString("yyyy-MM-dd HH:mm")));
             orderTag.Add(new XElement("RestartTime", RestartTimeUTC.ToString("HH:mm")));
             orderTag.Add(new XElement("OverType", OverType));
-
-
 
             var messageElements = TextMessage.ToXml();
             foreach (var el in messageElements)

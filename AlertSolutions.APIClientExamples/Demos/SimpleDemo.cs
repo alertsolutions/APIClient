@@ -29,7 +29,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             eb.EmailSubject = "Alert Solutions API Client Demo";
             eb.EmailFrom = "example@alertsolutions.com";
             eb.EmailReplyTo = "example@alertsolutions.com";
-            eb.TextBody = TextBody.FromFile("Files\\Email.txt");
+            eb.TextBody = new EmailTextBuilder().FromFile("Files\\Email.txt");
             // be sure to modify the ContactList.csv file so the email goes to your intended destinations
             eb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             eb.EmailHeader = "email";

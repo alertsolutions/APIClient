@@ -31,6 +31,9 @@ namespace AlertSolutions.API.Orders
             orderTag.Add(new XElement("FaxFrom", FaxFrom));
             orderTag.Add(new XElement("DocumentStyle", DocumentStyle));
 
+            if (Documents == null)
+                Documents = new List<FaxDocument>();
+
             if (Documents.Count < 1)
                 throw new FormatException("Must have at least one fax document.");
 

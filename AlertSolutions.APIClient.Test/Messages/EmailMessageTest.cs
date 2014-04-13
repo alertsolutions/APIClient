@@ -38,7 +38,7 @@ namespace AlertSolutions.APIClient.Test.Messages
             et.EmailReplyTo = "jthomas@blimessaging.com";
             et.EmailFrom = "jthomas@blimessaging.com";
             et.DisplayName = "JThomas from AlertSolutions";
-            et.Attachments = new List<Attachment>() { Attachment.FromText("Attachment.txt",attachmentFile) };
+            et.Attachments = new List<Attachment>() { new AttachmentBuilder().FromText("Attachment.txt", attachmentFile) };
             et.TextBody = TextBody.FromText(textbody);
             et.HtmlBody = HtmlBody.FromText(htmlbody);
             Assert.IsNotNull(et);

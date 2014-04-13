@@ -98,7 +98,7 @@ namespace AlertSolutions.APIClientExamples
             et.EmailReplyTo = "jthomas@blimessaging.com";
             et.EmailFrom = "jthomas@blimessaging.com";
             et.DisplayName = "JThomas from AlertSolutions";
-            et.Attachments = new List<Attachment>() { Attachment.FromFile("TestFiles\\Attachment.txt") };
+            et.Attachments = new List<Attachment>() { new AttachmentBuilder().FromFile("TestFiles\\Attachment.txt") };
             et.TextBody = TextBody.FromFile("TestFiles\\Email.txt");
             et.HtmlBody = HtmlBody.FromFile("TestFiles\\Email.html");
             return et;
@@ -117,10 +117,10 @@ namespace AlertSolutions.APIClientExamples
             eb.EmailFrom = "jthomas@blimessaging.com";
             eb.DisplayName = "JThomas from AlertSolutions";
             //eb.Attachments = new List<Attachment>() { Attachment.FromBase64String("file.pdf",b) };
-            eb.Attachments = new List<Attachment>() { Attachment.FromText("file.txt", "This is a test message attachment.") };
+            eb.Attachments = new List<Attachment>() { new AttachmentBuilder().FromText("file.txt", "This is a test message attachment.") };
             eb.TextBody = TextBody.FromFile("TestFiles\\Email.txt");
             eb.HtmlBody = HtmlBody.FromFile("TestFiles\\Email.html");
-            eb.List = ContactList.FromFile("TestFiles\\ContactList.csv");
+            eb.List = new ContactListBuilder().FromFile("TestFiles\\ContactList.csv");
             eb.EmailHeader = "email";
             eb.Proofs = new List<string>() { "jthomas@blimessaging.com" };
             return eb;
@@ -143,7 +143,7 @@ namespace AlertSolutions.APIClientExamples
             ml.ProjectCode = "PostAPIClient Refactor Test";
             ml.ShortCode = "77811";
             ml.TextMessage = TextMessage.FromFile("TestFiles\\TextMessage.txt");
-            ml.List = ContactList.FromFile("TestFiles\\ContactList.csv");
+            ml.List = new ContactListBuilder().FromFile("TestFiles\\ContactList.csv");
             ml.SMSHeader = "phone";
             ml.Proofs = new List<string>() { "4013002095" };
             return ml;
@@ -171,7 +171,7 @@ namespace AlertSolutions.APIClientExamples
             vl.BillCode = "PostAPIClient Refactor Test";
             vl.ProjectCode = "PostAPIClient Refactor Test";
             vl.CallerID = "4015555555";
-            vl.List = ContactList.FromFile("TestFiles\\ContactList.csv");
+            vl.List = new ContactListBuilder().FromFile("TestFiles\\ContactList.csv");
             vl.VoiceHeader = "phone";
             vl.ThrottleType = VoiceBroadcast.VoiceThrottleType.MaximumCalls;
             vl.ThrottleNumber = 2;
@@ -200,7 +200,7 @@ namespace AlertSolutions.APIClientExamples
             wl.BillCode = "PostAPIClient Refactor Test";
             wl.ProjectCode = "PostAPIClient Refactor Test";
             wl.FaxFrom = "JThomas";
-            wl.List = ContactList.FromFile("TestFiles\\FaxList1.csv");
+            wl.List = new ContactListBuilder().FromFile("TestFiles\\FaxList1.csv");
             wl.FaxHeader = "faxnumber";
             wl.Dedup = true;
             wl.DocumentStyle = "Letter";

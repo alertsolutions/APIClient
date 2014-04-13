@@ -50,9 +50,16 @@
     <Compile Include="CallScript.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Documents\Attachment.cs" />
+    <Compile Include="Documents\ContactListBuilder.cs" />
+    <Compile Include="Documents\AttachmentBuilder.cs" />
     <Compile Include="Documents\DocumentBase.cs" />
     <Compile Include="Documents\ContactList.cs" />
+    <Compile Include="Documents\DocumentElementBuilder.cs" />
     <Compile Include="Documents\EmailBody.cs" />
+    <Compile Include="Documents\EmailHtml.cs" />
+    <Compile Include="Documents\EmailTextBuilder.cs" />
+    <Compile Include="Documents\EmailHtmlBuilder.cs" />
+    <Compile Include="Documents\EmailText.cs" />
     <Compile Include="Documents\VoiceDocument.cs" />
     <Compile Include="Documents\Document.cs" />
     <Compile Include="Documents\IContainDocuments.cs" />

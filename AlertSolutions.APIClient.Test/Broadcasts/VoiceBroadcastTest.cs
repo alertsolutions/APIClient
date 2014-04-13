@@ -50,7 +50,7 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             vb.SendTimeUTC = DateTime.UtcNow;
             vb.StopTimeUTC = DateTime.UtcNow.Date.AddHours(20);
             vb.RestartTimeUTC = DateTime.UtcNow.Date.AddDays(1).AddHours(8);
-            vb.List = ContactList.FromText("requiredList.csv", "phone\r\n5555555555");
+            vb.List = new ContactListBuilder().FromText("requiredList.csv", "phone\r\n5555555555");
             vb.Documents = new List<Document>()
             {
                 VoiceDocument.FromText("live01.txt", "this is a live voice call.", VoiceDocumentType.Live),
@@ -74,7 +74,7 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             vb.CallerID = "4015555555";
             vb.ThrottleType = VoiceBroadcast.VoiceThrottleType.MaximumCalls;
             vb.ThrottleNumber = 2;
-            vb.List = ContactList.FromText("requiredList.csv", "phone\r\n5555555555");
+            vb.List = new ContactListBuilder().FromText("requiredList.csv", "phone\r\n5555555555");
             vb.VoiceHeader = "phone";
             vb.Documents = new List<Document>()
             {

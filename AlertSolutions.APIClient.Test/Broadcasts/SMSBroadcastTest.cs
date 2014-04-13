@@ -46,7 +46,7 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             sb.ShortCode = "77811";
             sb.TextMessage = TextMessage.FromText(DocumentSamples.GetSampleTextMessage());
             sb.StopTimeUTC = DateTime.UtcNow.AddDays(1);
-            sb.List = ContactList.FromText("list.csv", DocumentSamples.GetSampleContactListCsv());
+            sb.List = new ContactListBuilder().FromText("list.csv", DocumentSamples.GetSampleContactListCsv());
             Assert.IsNotNull(sb);
             string xml = sb.ToXml();
             Assert.IsNotNull(xml);

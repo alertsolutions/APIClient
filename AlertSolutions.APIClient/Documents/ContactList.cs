@@ -1,57 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace AlertSolutions.API.Documents
 {
     [Serializable]
-    public class ContactList : DocumentBase
+    public class ContactList
     {
-        public ContactList()
-        {
-        }
-
-        internal ContactList(string filePath) : base(filePath) { }
-        internal ContactList(int fileID) : base(fileID) { }
-        internal ContactList(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }
-
-        public static ContactList FromFile(string filePath)
-        {
-            return new ContactList(filePath);
-        }
-
-        public static ContactList FromText(string listName, string listText)
-        {
-            var bytes = System.Text.Encoding.UTF8.GetBytes(listText);
-            return new ContactList(listName, bytes);
-        }
-
-        public static ContactList FromByteArray(string listName, byte[] listData)
-        {
-            return new ContactList(listName, listData);
-        }
-
-        public static ContactList FromBase64String(string listName, string encodedListData)
-        {
-            var bytes = Convert.FromBase64String(encodedListData);
-            return new ContactList(listName, bytes);
-        }
-
-        public static ContactList FromID(int listID)
-        {
-            return new ContactList(listID);
-        }
+        internal int ContactListID { get; set; }
+        internal string ContactListName { get; set; }
+        internal byte[] ContactListBinary { get; set; }
 
         public List<XElement> ToXml()
         {
-            var xList = new List<XElement>();
-
-            var listXml = ToXml("List");
-
-            foreach (var element in listXml.Elements())
-                xList.Add(element);
-
-            return xList;
+            var listXml = new DocumentElementBuilder().ToXml("List", ContactListID, ContactListName, ContactListBinary);
+            return listXml.Elements().ToList();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             vb.BillCode = "APIClient Demo";
             vb.ProjectCode = "APIClient Demo";
             vb.CallerID = "5555555555";
-            vb.List = ContactList.FromFile("Files\\ContactList.csv");
+            vb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             vb.VoiceHeader = "phone";
             vb.ThrottleType = VoiceBroadcast.VoiceThrottleType.MaximumCalls;
             vb.ThrottleNumber = 2;

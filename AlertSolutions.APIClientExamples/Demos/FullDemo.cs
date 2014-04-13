@@ -30,8 +30,8 @@ namespace AlertSolutions.APIClientExamples.Demos
             eb.EmailSubject = "Alert Solutions API Client Demo";
             eb.EmailFrom = "example@alertsolutions.com";
             eb.EmailReplyTo = "example@alertsolutions.com";
-            eb.Attachments = new List<Attachment>() { Attachment.FromFile("Files\\Attachment.txt") };
-            eb.List = ContactList.FromFile("Files\\ContactList.csv");
+            eb.Attachments = new List<Attachment>() { new AttachmentBuilder().FromFile("Files\\Attachment.txt") };
+            eb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             eb.EmailHeader = "email";
             eb.Proofs = new List<string>() { "example@alertsolutions.com" };
             // can use either Text or HTML
@@ -46,7 +46,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             sb.ProjectCode = "APIClient Demo";
             sb.ShortCode = "77811";
             sb.TextMessage = TextMessage.FromFile("Files\\TextMessage.txt");
-            sb.List = ContactList.FromFile("Files\\ContactList.csv");
+            sb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             sb.SMSHeader = "phone";
             sb.Proofs = new List<string>() { "5555555555" };
 
@@ -57,7 +57,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             vb.BillCode = "APIClient Demo";
             vb.ProjectCode = "APIClient Demo";
             vb.CallerID = "5555555555";
-            vb.List = ContactList.FromFile("Files\\ContactList.csv");
+            vb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             vb.VoiceHeader = "phone";
             vb.ThrottleType = VoiceBroadcast.VoiceThrottleType.MaximumCalls;
             vb.ThrottleNumber = 2;
@@ -77,7 +77,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             fb.BillCode = "APIClient Demo";
             fb.ProjectCode = "APIClient Demo";
             fb.FaxFrom = "john doe";
-            fb.List = ContactList.FromFile("Files\\FaxList.csv");
+            fb.List = new ContactListBuilder().FromFile("Files\\FaxList.csv");
             fb.FaxHeader = "faxnumber";
             fb.Dedup = true;
             fb.DocumentStyle = "Letter";
@@ -101,7 +101,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             em.EmailSubject = "Alert Solutions API Client Demo";
             em.EmailFrom = "example@alertsolutions.com";
             em.EmailReplyTo = "example@alertsolutions.com";
-            em.Attachments = new List<Attachment>() { Attachment.FromFile("Files\\Attachment.txt") };
+            em.Attachments = new List<Attachment>() { new AttachmentBuilder().FromFile("Files\\Attachment.txt") };
             // can use either Text or HTML
             em.TextBody = TextBody.FromFile("Files\\Email.txt");
             //em.EmailBody = HtmlBody.FromFile("Files\\Email.html");

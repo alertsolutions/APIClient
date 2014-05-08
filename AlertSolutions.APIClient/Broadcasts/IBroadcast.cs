@@ -15,6 +15,7 @@ namespace AlertSolutions.API.Broadcasts
         string ProjectCode { get; set; }
         ContactList List { get; set; }
         bool AutoLaunch { get; set; }
+        bool Dedup { get; set; }
     }
 
     // common code for broadcast orders

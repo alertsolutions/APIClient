@@ -10,7 +10,7 @@ namespace AlertSolutions.API.Orders
 {
     public interface IOrder
     {
-        OrderType TypeOfOrder { get; set; }
+        OrderType TypeOfOrder { get; }
         DateTime SendTimeUTC { set; get; }
         string ToXml();
     }
@@ -28,7 +28,7 @@ namespace AlertSolutions.API.Orders
     public abstract class Order : IOrder
     {
         public DateTime SendTimeUTC { get; set; }
-        public OrderType TypeOfOrder { get; set; } // only inheriting order classes set this value
+        public OrderType TypeOfOrder { get; protected set; } // only inheriting order classes set this value
 
         protected Order()
         {

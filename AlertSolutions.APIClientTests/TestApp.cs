@@ -187,7 +187,7 @@ namespace AlertSolutions.APIClientExamples
             var tl = new FaxMessage();
             tl.FaxFrom = "james";
             tl.FaxNumber = "4013002095";
-            tl.DocumentStyle = "Letter";
+            tl.DocumentStyle = DocumentStyle.Letter;
             tl.Documents = new List<FaxDocument>()
             { 
                 new FaxDocumentBuilder().FromFile("TestFiles\\FaxText.txt"),
@@ -203,7 +203,7 @@ namespace AlertSolutions.APIClientExamples
             wl.List = new ContactListBuilder().FromFile("TestFiles\\FaxList1.csv");
             wl.FaxHeader = "faxnumber";
             wl.Dedup = true;
-            wl.DocumentStyle = "Letter";
+            wl.DocumentStyle = DocumentStyle.Letter;
             wl.Documents = new List<FaxDocument>()
             { 
                 new FaxDocumentBuilder().FromFile("TestFiles\\FaxText.txt"),

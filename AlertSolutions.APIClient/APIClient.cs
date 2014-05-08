@@ -9,8 +9,6 @@ using AlertSolutions.API.Broadcasts;
 using AlertSolutions.API.Messages;
 using AlertSolutions.API.Templates;
 
-//worthless change
-
 namespace AlertSolutions.API
 {
     public enum RequestResultType
@@ -31,9 +29,9 @@ namespace AlertSolutions.API
         private string _url;
         private string _user;
         private string _password;
+        private string _sessionId;
         private bool isInitialized = false;
         IWebClientProxy webClientProxy = ApiClientResolver.Instance.Container.Resolve<IWebClientProxy>();
-
 
         /// <summary>
         /// If activated the client pretends it's sending broadcasts or messages.
@@ -42,7 +40,7 @@ namespace AlertSolutions.API
         /// </summary>
         public bool TestMode { get; set; }
 
-        public void Initialize(string url, string user, string password)
+        public void InitializeWithUser(string url, string user, string password)
         {
             _url = url;
             _user = user;
@@ -51,27 +49,41 @@ namespace AlertSolutions.API
             this.isInitialized = true;
         }
 
-        public void CheckInitialized()
+        public void InitializeWithUserAndSession(string url, string user, string password, string sessionId)
         {
-            if (!this.isInitialized) throw new ApplicationException("APIClient.Initialized must be called prior to this method");
+            _url = url;
+            _user = user;
+            _password = password;
+            _sessionId = sessionId;
+            TestMode = false;
+            this.isInitialized = true;
         }
 
-        public ApiClient()
+        public void InitializeWithSession(string url, string sessionId)
         {
+            _url = url;
+            _sessionId = sessionId;
+            TestMode = false;
+            this.isInitialized = true;
         }
+
+        public void CheckInitialized()
+        {
+            if (!this.isInitialized) throw new ApplicationException("APIClient.Initialize must be called prior to this method");
+        }
+
+        public ApiClient() { }
 
         public ApiClient(string url, string user, string password)
         {
-            Initialize(url,user,password);
+            InitializeWithUser(url, user, password);
         }
-
 
         /// <summary>
         /// Sends only broadcasts.
         /// </summary>
         public OrderResponse LaunchBroadcast(IBroadcast broadcast)
         {
-            CheckInitialized();
             return SendOrder(broadcast);
         }
 
@@ -80,17 +92,14 @@ namespace AlertSolutions.API
         /// </summary>
         public OrderResponse LaunchMessage(IMessage message)
         {
-            CheckInitialized();
             return SendOrder(message);
         }
-
 
         /// <summary>
         /// Sends an order. All broadcasts and messages are orders.
         /// </summary>
         public OrderResponse SendOrder(IOrder order)
         {
-            CheckInitialized();
             order = Utilities.OffsetOrderTimeFieldsToEasternStandard(order);
             var xml = order.ToXml();
             return SendOrder(xml);
@@ -107,110 +116,79 @@ namespace AlertSolutions.API
         /// </summary>
         public OrderResponse SendOrder(string xml)
         {
-            CheckInitialized();
             return SendOrder(XDocument.Parse(xml));
         }
+
         public OrderResponse SendOrder(XDocument xml)
         {
             CheckInitialized();
-            var type = "";
-            var orderid = -1;
-            var transactionid = "";
-            var error = "unknown";
-            var status = RequestResultType.Error;
-            var responseTime = -1;
-            Stopwatch sw =  new Stopwatch();
+            var type = xml.Element("Orders").Element("Order")
+                .Attribute("Type").Value;
+            var response = new OrderResponse(type);
 
-            var element = xml.Element("Orders").Element("Order");
-            type = element.Attribute("Type").Value;
-                  
+            if (TestMode)
+            {
+                response.InitializeTestMode();
+                return response;
+            }
+
             try
             {
-                if (TestMode)
-                {
-                    // give response indicating testmode
-                    orderid = 0;
-                    transactionid = "0";
-                    responseTime = 0;
-                    status = RequestResultType.TestMode;
-                    error = "none";
-                }
-                else
-                {
-                    //send for real
-                    StringBuilder location = new StringBuilder("");
-                    location.Append(_url);
-                    location.Append("/xml/");
-                    location.Append(type);
-                    location.Append("new.aspx?");
-                    location.Append("UserName=");
-                    location.Append(_user);
-                    location.Append("&UserPassword=");
-                    location.Append(_password);
-                    location.Append("&PostWay=sync");
-                    location.Append("&CSVFile=");
-
-                    string response;
-                    sw.Start();
-                    response = webClientProxy.UploadString(location.ToString(), xml.ToString());
-                    sw.Stop();
-
-                    var xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(response);
-                    //assumes there is only one of this kind of tag
-                    var xnList = xmlDoc.SelectNodes("/PostAPIResponse/SaveTransactionalOrderResult");
-
-                    status = RequestResultType.Success; // we have xml and it parsed correctly, so here we know request was made successfully
-                    error = "none";
-
-                    foreach (XmlNode xn in xnList)
-                    {
-                        try
-                        {
-                            orderid = Convert.ToInt32(xn["OrderID"].InnerText);
-
-                            if (type == OrderTypeUtil.GetCode(OrderType.EmailMessage) || type == OrderTypeUtil.GetCode(OrderType.SMSMessage) ||
-                                type == OrderTypeUtil.GetCode(OrderType.VoiceMessage) || type == OrderTypeUtil.GetCode(OrderType.FaxMessage))
-                                transactionid = xn["transactionID"].InnerText;
-                        }
-                        catch (NullReferenceException)
-                        {
-                            status = RequestResultType.Error;
-                            error = xn["Exception"].InnerText;
-                        }
-                    }
-                }
-            }
-            catch (WebException wex)
-            {
-                status = RequestResultType.Error;
-                error = "Server Error: " + wex;
-            }
-            catch (TimeoutException tex)
-            {
-                status = RequestResultType.Error;
-                error = "Server Error: " + tex;
+                response = SendXml(type, xml);
             }
             catch (Exception ex)
             {
-                status = RequestResultType.Error;
-                error = "Error: " + ex; 
+                response.RequestResult = RequestResultType.Error;
+                response.RequestErrorMessage = GetErrorMessage(ex);
+            }
+
+            return response;
+        }
+
+        private OrderResponse SendXml(string type, XDocument xml)
+        {
+            //send for real
+            var result = new OrderResponse(type);
+            var sw = Stopwatch.StartNew();
+            try
+            {
+                var url = BuildUrl(OrderTypeUtil.GetCode(result.OrderType));
+                var response = webClientProxy.UploadString(url, xml.ToString());
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(response);
+                //assumes there is only one of this kind of tag
+                var xmlResult = xmlDoc.SelectSingleNode("/PostAPIResponse/SaveTransactionalOrderResult");
+                result.ParseXml(xmlResult);
             }
             finally
             {
                 sw.Stop();
-                responseTime = sw.Elapsed.Seconds;
+                result.ResponseTime = sw.Elapsed.Seconds;
             }
-            
-            return new OrderResponse
-            {
-                OrderID = orderid,
-                Unqid = transactionid,
-                OrderType = OrderTypeUtil.ParseCode(type),
-                ResponseTime = responseTime,
-                RequestResult = status,
-                RequestErrorMessage = error,
-            };
+            return result;
+        }
+
+        private string GetErrorMessage(Exception error)
+        {
+            var errorType = error.GetType();
+            if (errorType == typeof(WebException) || errorType == typeof(TimeoutException))
+                return "Server Error: " + error;
+            return "Error: " + error;
+        }
+
+        private string BuildUrl(string type)
+        {
+            StringBuilder location = new StringBuilder("");
+            location.Append(_url);
+            location.Append("/xml/");
+            location.Append(type + "new.aspx?");
+            location.Append("UserName=" + _user);
+            location.Append("&UserPassword=" + _password);
+            location.Append("&PostWay=sync");
+            location.Append("&CSVFile=");
+            if (!string.IsNullOrEmpty(_sessionId))
+                location.Append("&SessionID=" + _sessionId);
+            return location.ToString();
         }
 
         /// <summary>
@@ -219,14 +197,14 @@ namespace AlertSolutions.API
         public OrderReport GetOrderReport(int OrderID, OrderType type, ReportReturnType returnType)
         {
             CheckInitialized();
-            return GetOrderReport(new OrderResponse() { OrderID = OrderID, OrderType = type }, returnType);
+            return GetOrderReport(new OrderResponse(type) { OrderID = OrderID }, returnType);
         }
 
         public OrderReport GetOrderReport(OrderResponse response, ReportReturnType returnType)
         {
             CheckInitialized();
             var trans = GetTransactionReport(response, returnType);
-            return new OrderReport()
+            return new OrderReport
                 {
                     OrderID = trans.OrderID,
                     OrderType = trans.OrderType,
@@ -243,14 +221,14 @@ namespace AlertSolutions.API
         public TransactionReport GetTransactionReport(string transactionID, OrderType type, ReportReturnType returnType)
         {
             CheckInitialized();
-            return GetTransactionReport(new OrderResponse() { Unqid = transactionID, OrderType = type }, returnType);
+            return GetTransactionReport(new OrderResponse(type) { Unqid = transactionID }, returnType);
         }
 
         public TransactionReport GetTransactionReport(OrderResponse response, ReportReturnType returnType)
         {
             CheckInitialized();
-            var error = "unknown";
-            var requestResult = RequestResultType.Error;
+            var error = "none";
+            var requestResult = RequestResultType.Success;
             var reportData = "";
             var orderStatus = "";
 
@@ -261,84 +239,57 @@ namespace AlertSolutions.API
                 reportData = "This is a test order report. Order ID: ( " + response.OrderID + " ) Type: ( " + type.ToString() + " )";
                 requestResult = RequestResultType.TestMode;
                 orderStatus = "Test Mode.";
-                error = "none";
+                return new TransactionReport(response, requestResult, error, orderStatus, reportData);
             }
-            else
+
+            try
             {
-                try
-                {
-                    var location = new StringBuilder(_url);
+                var location = BuildReportUrl(response, returnType, type);
+                reportData = webClientProxy.UploadString(location, "");
 
-                    if (type == OrderType.FaxMessage) // test for FaxMessage/TL since it's url doesn't follow the convention
-                    {
-                        location.Append(@"/");
-                        location.Append(OrderTypeUtil.GetCode(type));
-                        location.Append("ReportByUnqid.aspx?");
-                    }
-                    else
-                    {
-                        location.Append(@"/");
-                        location.Append(OrderTypeUtil.GetCode(type));
-                        location.Append("report.aspx?");
-                    }
-
-                    location.Append("UserName=");
-                    location.Append(_user);
-                    location.Append("&UserPassword=");
-                    location.Append(_password);
-                    location.Append("&ReturnType=");
-                    location.Append(returnType.ToString());
-
-                    if (type == OrderType.EmailMessage || type == OrderType.SMSMessage ||
-                        type == OrderType.VoiceMessage || type == OrderType.FaxMessage)
-                    {
-                        location.Append("&Unqid=");
-                        location.Append(response.Unqid);
-                    }
-
-
-                    location.Append("&OrderID=");
-                    location.Append(response.OrderID);
-
-                    reportData = webClientProxy.UploadString(location.ToString(), "");
-
-                    requestResult = RequestResultType.Success;
-                    error = "none";
-
-                    var xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(reportData);
-                    //assumes there is only one of this kind of tag
-                    var xnList = xmlDoc.SelectNodes("/PostAPIResponse/SaveTransactionalOrderResult");
-                    foreach (XmlNode xn in xnList)
-                    {
-                        try
-                        {
-                            orderStatus = xn["status"].InnerText;
-                        }
-                        catch (NullReferenceException)
-                        {
-                            requestResult = RequestResultType.Error;
-                            error = xn["Exception"].InnerText;
-                        }
-                    }
-                }
-                catch (Exception ex)
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(reportData);
+                //assumes there is only one of this kind of tag
+                var xmlResult = xmlDoc.SelectSingleNode("/PostAPIResponse/SaveTransactionalOrderResult");
+                if (xmlResult["status"] != null)
+                    orderStatus = xmlResult["status"].InnerText;
+                else
                 {
                     requestResult = RequestResultType.Error;
-                    error = "An error occurred while requesting the order report. " + ex.ToString();
+                    error = xmlResult["Exception"].InnerText;
                 }
             }
-
-            return new TransactionReport()
+            catch (Exception ex)
             {
-                OrderID = response.OrderID,
-                Unqid = response.Unqid,
-                OrderType = response.OrderType,
-                RequestResult = requestResult,
-                RequestErrorMessage = error,
-                OrderStatus = orderStatus,
-                ReportData = reportData,
-            };
+                requestResult = RequestResultType.Error;
+                error = "An error occurred while requesting the order report. " + ex;
+            }
+
+            return new TransactionReport(response, requestResult, error, orderStatus, reportData);
+        }
+
+        private string BuildReportUrl(OrderResponse response, ReportReturnType returnType, OrderType type)
+        {
+            var location = new StringBuilder(_url);
+
+            location.Append(@"/" + OrderTypeUtil.GetCode(type));
+            location.Append(type == OrderType.FaxMessage ? "ReportByUnqid.aspx?" : "report.aspx?");
+
+            location.Append("UserName=" + _user);
+            location.Append("&UserPassword=" + _password);
+            location.Append("&ReturnType=" + returnType);
+
+            if (IsTransaction(type))
+                location.Append("&Unqid=" + response.Unqid);
+
+            location.Append("&OrderID=" + response.OrderID);
+            return location.ToString();
+        }
+
+        private bool IsTransaction(OrderType type)
+        {
+            return type == OrderType.EmailMessage || type == OrderType.SMSMessage ||
+                   type == OrderType.VoiceMessage || type == OrderType.FaxMessage;
         }
 
         /// <summary>
@@ -356,17 +307,10 @@ namespace AlertSolutions.API
                 var xnList = xmlDoc.SelectNodes("/PostAPIResponse/CancelOrderResult");
                 int statusCode = 0;
                 foreach (XmlNode xn in xnList)
-                {
                     statusCode = Convert.ToInt32(xn["StatusCode"].InnerText);
-                }
-                if (statusCode == 0) // -1 is error, 0 is bad user/password
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+
+                // -1 is error, 0 is bad user/password
+                return statusCode != 0;
             }
             catch (Exception ex)
             {
@@ -389,10 +333,8 @@ namespace AlertSolutions.API
             var location = new StringBuilder();
             location.Append(_url);
             location.Append("/xml/CancelOrder.aspx?");
-            location.Append("UserName=");
-            location.Append(_user);
-            location.Append("&UserPassword=");
-            location.Append(_password);
+            location.Append("UserName=" + _user);
+            location.Append("&UserPassword=" + _password);
 
             var xml = "<Cancels><Cancel Type=\"" + OrderTypeUtil.GetCode(type) + "\">" + orderid + "</Cancel></Cancels>";
             
@@ -408,12 +350,9 @@ namespace AlertSolutions.API
             var location = new StringBuilder();
             location.Append(_url);
             location.Append("/xml/lists.aspx?");
-            location.Append("UserName=");
-            location.Append(_user);
-            location.Append("&UserPassword=");
-            location.Append(_password);
-            location.Append("&ReturnType=");
-            location.Append(returnType.ToString());
+            location.Append("UserName=" + _user);
+            location.Append("&UserPassword=" + _password);
+            location.Append("&ReturnType=" + returnType);
 
             return webClientProxy.DownloadString(location.ToString());
         }
@@ -436,25 +375,14 @@ namespace AlertSolutions.API
 
             string response = "";
 
-
             try
             {
                 response = webClientProxy.UploadString(location.ToString(), xml.ToString());
             }
-            catch (WebException wex)
-            {
-                status = RequestResultType.Error;
-                error = "Server Error: " + wex;
-            }
-            catch (TimeoutException tex)
-            {
-                status = RequestResultType.Error;
-                error = "Server Error: " + tex;
-            }
             catch (Exception ex)
             {
                 status = RequestResultType.Error;
-                error = "Error: " + ex;
+                error = GetErrorMessage(ex);
             }
 
             var xmlDoc = new XmlDocument();

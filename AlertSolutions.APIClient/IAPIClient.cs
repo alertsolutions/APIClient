@@ -15,7 +15,7 @@ namespace AlertSolutions.API
         /// <param name="url">The URL.</param>
         /// <param name="user">The user.</param>
         /// <param name="password">The password.</param>
-        void Initialize(string url, string user, string password);
+        void InitializeWithUser(string url, string user, string password);
 
         /// <summary>
         /// If activated the client pretends it's sending broadcasts or messages.

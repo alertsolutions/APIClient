@@ -22,13 +22,12 @@ namespace AlertSolutions.API.Orders
 
         public CallScript CallScript { get; set; }
 
-        internal VoiceBase()
+        protected VoiceBase()
         {
             CallScript = null;
             HotKeys = new Dictionary<string, string>();
-
             CallerID = "0";
-            
+            Documents = new List<VoiceDocument>();
         }
 
         protected override XDocument BuildXml()

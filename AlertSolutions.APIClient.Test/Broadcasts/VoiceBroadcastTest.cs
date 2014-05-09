@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using AlertSolutions.API.Broadcasts;
 using AlertSolutions.API.Documents;
-using AlertSolutions.API.Messages;
 using AlertSolutions.API.Orders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

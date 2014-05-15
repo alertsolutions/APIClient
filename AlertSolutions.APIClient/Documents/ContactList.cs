@@ -8,9 +8,9 @@ namespace AlertSolutions.API.Documents
     [Serializable]
     public class ContactList
     {
-        internal int ContactListID { get; set; }
-        internal string ContactListName { get; set; }
-        internal byte[] ContactListBinary { get; set; }
+        public int ContactListID { get; set; }
+        public string ContactListName { get; set; }
+        public byte[] ContactListBinary { get; set; }
 
         public List<XElement> ToXml()
         {

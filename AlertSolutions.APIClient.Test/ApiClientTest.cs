@@ -225,6 +225,24 @@ namespace AlertSolutions.APIClient.Test
         }
 
         [TestMethod]
+        public void SendOrderBadXmlTest()
+        {
+            var xmlStub = XDocument.Parse(@"<Orders><Order Type=""ML""></Order></Orders>");
+
+            var wc = new Mock<IWebClientProxy>();
+            wc.Setup(w => w.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns("<PostAPIResponse><Exception>missing BillCode tag</Exception></PostAPIResponse>");
+            ApiClientResolver.Instance.Container.Register<IWebClientProxy>(r => wc.Object);
+
+            var ac = new ApiClient();
+            ac.InitializeWithUser("", "", "");
+            var response = ac.SendOrder(xmlStub);
+            Assert.AreEqual(OrderType.SMSBroadcast, response.OrderType);
+            Assert.AreEqual("missing BillCode tag", response.RequestErrorMessage);
+            Assert.AreEqual(RequestResultType.Error, response.RequestResult);
+        }
+
+        [TestMethod]
         public void GetDefaultErrorTest()
         {
             var ac = new ApiClient();

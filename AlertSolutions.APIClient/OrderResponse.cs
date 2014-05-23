@@ -38,18 +38,21 @@ namespace AlertSolutions.API
 
         public void ParseXml(XmlNode xmlResult)
         {
-            RequestResult = RequestResultType.Success; // we have xml and it parsed correctly, so here we know request was made successfully
-            RequestErrorMessage = "none";
-
-            if (xmlResult["OrderID"] == null)
+            if (xmlResult.Name == "Exception")
             {
                 RequestResult = RequestResultType.Error;
-                RequestErrorMessage = xmlResult["Exception"].InnerText;
+                RequestErrorMessage = xmlResult.InnerText;
+            }
+            else if (xmlResult.Name == "SaveTransactionalOrderResult")
+            {
+                RequestResult = RequestResultType.Success;
+                RequestErrorMessage = "none";
+                OrderID = Convert.ToInt32(xmlResult["OrderID"].InnerText);
+                Unqid = GetTransactionId(xmlResult);
             }
             else
             {
-                OrderID = Convert.ToInt32(xmlResult["OrderID"].InnerText);
-                Unqid = GetTransactionId(xmlResult);
+                throw new InvalidOperationException("invalid xml response: " + xmlResult);
             }
         }
 

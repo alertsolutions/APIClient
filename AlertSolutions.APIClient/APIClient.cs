@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Net;
 using System.Xml;
@@ -156,8 +157,8 @@ namespace AlertSolutions.API
                 var response = webClientProxy.UploadString(url, xml.ToString());
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(response);
-                //assumes there is only one of this kind of tag
-                var xmlResult = xmlDoc.SelectSingleNode("/PostAPIResponse/SaveTransactionalOrderResult");
+                var xmlResult = xmlDoc.SelectSingleNode("/PostAPIResponse/SaveTransactionalOrderResult") ??
+                                xmlDoc.SelectSingleNode("/PostAPIResponse/Exception");
                 result.ParseXml(xmlResult);
             }
             finally

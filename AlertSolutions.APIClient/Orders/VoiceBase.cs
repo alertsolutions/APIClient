@@ -18,14 +18,14 @@ namespace AlertSolutions.API.Orders
         public DateTime RestartTimeUTC { get; set; }
         public int DurationHours { get; set; }
 
-        public Dictionary<string, string> HotKeys { get; set; }
+        public List<HotKey> HotKeys { get; set; }
 
         public CallScript CallScript { get; set; }
 
         protected VoiceBase()
         {
             CallScript = null;
-            HotKeys = new Dictionary<string, string>();
+            HotKeys = new List<HotKey>();
             CallerID = "0";
             Documents = new List<VoiceDocument>();
         }
@@ -79,36 +79,7 @@ namespace AlertSolutions.API.Orders
 
         private List<XElement> GetHotKeyElements()
         {
-            var xList = new List<XElement>();
-            var hotkeyNames = new Dictionary<string, string>()
-            { 
-                { "HotZero", "0" }, 
-                { "HotOne", "1" },
-                { "HotTwo", "2" },
-                { "HotThree", "3" },
-                { "HotFour", "4" },
-                { "HotFive", "5" },
-                { "HotSix", "6" },
-                { "HotSeven", "7" },
-                { "HotEight", "8" },
-                { "HotNine", "9" },
-                { "HotStar", "*" },
-                { "HotPound", "#" } 
-            };
-            
-            foreach(var name in hotkeyNames)
-            {
-                if (HotKeys.ContainsKey(name.Value))
-                {
-                    xList.Add(new XElement(name.Key, HotKeys[name.Value]));
-                }
-                else
-                {
-                    xList.Add(new XElement(name.Key));
-                }
-            }
-
-            return xList;
+            return HotKeys.Select(key => key.ToXml()).ToList();
         }
     }
 }

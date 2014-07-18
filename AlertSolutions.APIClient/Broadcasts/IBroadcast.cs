@@ -8,6 +8,10 @@ using AlertSolutions.API.Orders;
 
 namespace AlertSolutions.API.Broadcasts
 {
+    public interface IMultiLanguageBroadcast : IBroadcast
+    {
+        string LanguageHeader { get; set; }
+    }
     // enforces fields so orders using it will have these fields accessible to the user
     public interface IBroadcast : IOrder
     {

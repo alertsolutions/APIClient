@@ -8,7 +8,7 @@ using AlertSolutions.API.Orders;
 namespace AlertSolutions.API.Broadcasts
 {
     [Serializable]
-    public class EmailBroadcast : EmailBase, IBroadcast
+    public class EmailBroadcast : EmailBase, IBroadcast, IMultiLanguageBroadcast
     {
         // accessors for broadcast info ( goes into each class that inherits IBroadcastOrder)
         private BroadcastInfo _broadcastInfo = new BroadcastInfo();

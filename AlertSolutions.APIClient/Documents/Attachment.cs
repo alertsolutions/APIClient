@@ -8,9 +8,9 @@ namespace AlertSolutions.API.Documents
     [Serializable]
     public class Attachment
     {
-        internal int AttachmentID { get; set; }
-        internal string AttachmentName { get; set; }
-        internal byte[] AttachmentBinary { get; set; }
+        public int AttachmentID { get; internal set; }
+        public string AttachmentName { get; internal set; }
+        public byte[] AttachmentBinary { get; internal set; }
 
         internal XElement ToXml()
         {

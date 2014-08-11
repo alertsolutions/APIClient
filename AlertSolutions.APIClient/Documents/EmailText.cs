@@ -9,9 +9,9 @@ namespace AlertSolutions.API.Documents
     [Serializable]
     public class EmailText
     {
-        internal int EmailTextID { get; set; }
-        internal string EmailTextName { get; set; }
-        internal byte[] EmailTextBinary { get; set; }
+        public int EmailTextID { get; internal set; }
+        public string EmailTextName { get; internal set; }
+        public byte[] EmailTextBinary { get; internal set; }
 
         internal List<XElement> ToXml()
         {

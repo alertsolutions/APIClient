@@ -9,9 +9,9 @@ namespace AlertSolutions.API.Documents
     [Serializable]
     public class FaxDocument
     {
-        internal int FaxDocumentID { get; set; }
-        internal string FaxDocumentName { get; set; }
-        internal byte[] FaxDocumentBinary { get; set; }
+        public int FaxDocumentID { get; internal set; }
+        public string FaxDocumentName { get; internal set; }
+        public byte[] FaxDocumentBinary { get; internal set; }
 
         internal XElement ToXml()
         {

@@ -53,6 +53,7 @@
     <Compile Include="Broadcasts\FaxBroadcastTest.cs" />
     <Compile Include="Broadcasts\VoiceBroadcastTest.cs" />
     <Compile Include="Broadcasts\EmailBroadcastTest.cs" />
+    <Compile Include="CancelResponseTest.cs" />
     <Compile Include="Documents\HotKeysTest.cs" />
     <Compile Include="Messages\EmailMessageTest.cs" />
     <Compile Include="Messages\FaxMessageTest.cs" />

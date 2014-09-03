@@ -25,6 +25,14 @@ namespace AlertSolutions.API
         CSV,
     }
 
+    public enum CancelStatusCode
+    {
+        Success = 1,
+        DoesNotExist = -1,
+        NotScheduled = -2,
+        UnknownError = 0
+    }
+
     public class ApiClient : IAPIClient
     {
         private string _url;
@@ -303,15 +311,8 @@ namespace AlertSolutions.API
             {
                 var response = CancelOrder(0, OrderType.EmailBroadcast);
 
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(response);
-                var xnList = xmlDoc.SelectNodes("/PostAPIResponse/CancelOrderResult");
-                int statusCode = 0;
-                foreach (XmlNode xn in xnList)
-                    statusCode = Convert.ToInt32(xn["StatusCode"].InnerText);
-
                 // -1 is error, 0 is bad user/password
-                return statusCode != 0;
+                return ((int)response.StatusCode) != 0;
             }
             catch (Exception ex)
             {
@@ -322,13 +323,13 @@ namespace AlertSolutions.API
         /// <summary>
         /// Cancels an order. All broadcasts and messages are orders.
         /// </summary>
-        public string CancelOrder(OrderResponse response)
+        public CancelResponse CancelOrder(OrderResponse response)
         {
             CheckInitialized();
             return CancelOrder(response.OrderID, response.OrderType);
         }
 
-        public string CancelOrder(int orderid, OrderType type)
+        public CancelResponse CancelOrder(int orderid, OrderType type)
         {
             CheckInitialized();
             var location = new StringBuilder();
@@ -336,10 +337,15 @@ namespace AlertSolutions.API
             location.Append("/xml/CancelOrder.aspx?");
             location.Append("UserName=" + _user);
             location.Append("&UserPassword=" + _password);
+            if (!string.IsNullOrEmpty(_sessionId))
+                location.Append("&SessionID=" + _sessionId);
 
-            var xml = "<Cancels><Cancel Type=\"" + OrderTypeUtil.GetCode(type) + "\">" + orderid + "</Cancel></Cancels>";
+            var xdoc = new XElement("Cancels",
+                new XElement("Cancel", new XAttribute("Type", OrderTypeUtil.GetCode(type)), orderid));
             
-            return webClientProxy.UploadString(location.ToString(), xml);
+            var responseXml =  webClientProxy.UploadString(location.ToString(), xdoc.ToString(SaveOptions.DisableFormatting));
+            var cancelResponse = new CancelResponse(responseXml);
+            return cancelResponse;
         }
 
         /// <summary>

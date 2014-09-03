@@ -76,12 +76,13 @@ namespace AlertSolutions.APIClient.Test
             var mockWebClientProxy = new Mock<IWebClientProxy>();
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(
-                    () => { return "some result"; });
+                    () => @"<PostAPIResponse><CancelOrderResult Id=""1"" Type=""EB""><StatusCode>1</StatusCode><Status>some result</Status></CancelOrderResult></PostAPIResponse>");
             ApiClientResolver.Instance.Container.Register<IWebClientProxy>(delegate { return mockWebClientProxy.Object; });
             ApiClient apiClient = new ApiClient();
             apiClient.InitializeWithUser("blah", "user", "password");
-            string retval = apiClient.CancelOrder(new OrderResponse(OrderType.EmailBroadcast) { OrderID = 1 });
-            Assert.AreEqual("some result", retval);
+            var response = apiClient.CancelOrder(new OrderResponse(OrderType.EmailBroadcast) { OrderID = 1 });
+            Assert.AreEqual("some result", response.StatusMessage);
+            Assert.AreEqual(CancelStatusCode.Success, response.StatusCode);
         }
 
         [TestMethod]
@@ -322,7 +323,7 @@ namespace AlertSolutions.APIClient.Test
             Assert.IsTrue(thrown);
 
             mockWebClientProxy.Setup(x => x.UploadString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(() => "<PostAPIResponse><CancelOrderResult><StatusCode>-1</StatusCode></CancelOrderResult></PostAPIResponse>");
+                .Returns(() => "<PostAPIResponse><CancelOrderResult Type=\"VL\" Id=\"0\"><Status>message</Status><StatusCode>-1</StatusCode></CancelOrderResult></PostAPIResponse>");
 
             Assert.IsTrue(apiClient.Authenticated());
         }

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ApiClientResolver.cs" />
     <Compile Include="CallScript.cs" />
+    <Compile Include="CancelResponse.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Documents\Attachment.cs" />
     <Compile Include="Documents\ContactListBuilder.cs" />

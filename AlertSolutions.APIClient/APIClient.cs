@@ -323,13 +323,13 @@ namespace AlertSolutions.API
         /// <summary>
         /// Cancels an order. All broadcasts and messages are orders.
         /// </summary>
-        public CancelResponse CancelOrder(OrderResponse response)
+        public ICancelResponse CancelOrder(OrderResponse response)
         {
             CheckInitialized();
             return CancelOrder(response.OrderID, response.OrderType);
         }
 
-        public CancelResponse CancelOrder(int orderid, OrderType type)
+        public ICancelResponse CancelOrder(int orderid, OrderType type)
         {
             CheckInitialized();
             var location = new StringBuilder();

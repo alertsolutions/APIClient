@@ -74,9 +74,9 @@ namespace AlertSolutions.API
         /// <summary>
         /// Cancels an order. All broadcasts and messages are orders.
         /// </summary>
-        CancelResponse  CancelOrder(OrderResponse response);
+        ICancelResponse CancelOrder(OrderResponse response);
 
-        CancelResponse CancelOrder(int orderid, OrderType type);
+        ICancelResponse CancelOrder(int orderid, OrderType type);
 
         /// <summary>
         /// Returns a collection of contact lists associated with the user.

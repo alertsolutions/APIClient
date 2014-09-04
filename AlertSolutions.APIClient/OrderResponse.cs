@@ -3,8 +3,20 @@ using System.Xml;
 
 namespace AlertSolutions.API
 {
+    public interface IOrderResponse
+    {
+        int OrderID { get; set; }
+        string Unqid { get; set; }
+        OrderType OrderType { get; set; }
+        int ResponseTime { get; set; }
+        RequestResultType RequestResult { get; set; }
+        string RequestErrorMessage { get; set; }
+        void InitializeTestMode();
+        void ParseXml(XmlNode xmlResult);
+    }
+
     [Serializable]
-    public class OrderResponse
+    public class OrderResponse : IOrderResponse
     {
         public OrderResponse(OrderType type)
         {

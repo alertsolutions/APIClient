@@ -18,6 +18,22 @@ namespace AlertSolutions.API
         void InitializeWithUser(string url, string user, string password);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="sessionId"></param>
+        void InitializeWithUserAndSession(string url, string user, string password, string sessionId);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="sessionId"></param>
+        void InitializeWithSession(string url, string sessionId);
+
+        /// <summary>
         /// If activated the client pretends it's sending broadcasts or messages.
         /// The client still works the same, but never actually sends messages to the API.
         /// This is useful for testing, when you don't really want to send broadcasts or messages to contacts. 

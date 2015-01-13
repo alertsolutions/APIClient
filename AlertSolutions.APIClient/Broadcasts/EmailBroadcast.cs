@@ -41,6 +41,7 @@ namespace AlertSolutions.API.Broadcasts
             this.EmailHeader = "";
             this.LanguageHeader = "";
             this.ResendInterval = "";
+            this.Dedup = true;
         }
 
         public override string ToXml()

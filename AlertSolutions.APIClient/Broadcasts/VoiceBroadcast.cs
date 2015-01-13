@@ -49,6 +49,7 @@ namespace AlertSolutions.API.Broadcasts
             this.LanguageHeader = "";
             this.ThrottleType = VoiceThrottleType.None;
             this.ThrottleNumber = 1;
+            this.Documents = new List<VoiceDocument>();
         }
 
         public override string ToXml()

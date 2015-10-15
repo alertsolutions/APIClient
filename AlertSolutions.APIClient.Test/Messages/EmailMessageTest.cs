@@ -34,10 +34,10 @@ namespace AlertSolutions.APIClient.Test.Messages
             string htmlbody = DocumentSamples.GetSampleEmailHtml();
 
             et.EmailTo = "jthomas@blimessaging.com";
-            et.EmailSubject = "PostAPIClient Refactor Test (ET)";
+            et.EmailSubject = "PostAPIClient Refactor Test (ET) é Ӕ";
             et.EmailReplyTo = "jthomas@blimessaging.com";
             et.EmailFrom = "jthomas@blimessaging.com";
-            et.DisplayName = "JThomas from AlertSolutions";
+            et.DisplayName = "JThomas from AlertSolutions é Ӕ";
             et.Attachments = new List<Attachment>() { new AttachmentBuilder().FromText("Attachment.txt", attachmentFile) };
             et.TextBody = new EmailTextBuilder().FromText(textbody);
             et.HtmlBody = new EmailHtmlBuilder().FromText(htmlbody);

@@ -34,13 +34,13 @@ namespace AlertSolutions.APIClient.Test.Messages
             string htmlbody = DocumentSamples.GetSampleEmailHtml();
 
             et.EmailTo = "jthomas@blimessaging.com";
-            et.EmailSubject = "PostAPIClient Refactor Test (ET)";
+            et.EmailSubject = "PostAPIClient Refactor Test (ET) é Ӕ";
             et.EmailReplyTo = "jthomas@blimessaging.com";
             et.EmailFrom = "jthomas@blimessaging.com";
-            et.DisplayName = "JThomas from AlertSolutions";
-            et.Attachments = new List<Attachment>() { Attachment.FromText("Attachment.txt",attachmentFile) };
-            et.TextBody = TextBody.FromText(textbody);
-            et.HtmlBody = HtmlBody.FromText(htmlbody);
+            et.DisplayName = "JThomas from AlertSolutions é Ӕ";
+            et.Attachments = new List<Attachment>() { new AttachmentBuilder().FromText("Attachment.txt", attachmentFile) };
+            et.TextBody = new EmailTextBuilder().FromText(textbody);
+            et.HtmlBody = new EmailHtmlBuilder().FromText(htmlbody);
             Assert.IsNotNull(et);
             Assert.IsNotNull(et.EmailTo);
             Assert.IsNotNull(et.ToXml());
@@ -55,7 +55,7 @@ namespace AlertSolutions.APIClient.Test.Messages
                 DisplayName = "jt",
                 EmailSubject = "test email message",
                 SendTimeUTC = DateTime.UtcNow,
-                TextBody = TextBody.FromText("This is a test email")
+                TextBody = new EmailTextBuilder().FromText("This is a test email")
             };
 
             StringBuilder sb = new StringBuilder();

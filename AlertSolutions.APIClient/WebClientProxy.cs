@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace AlertSolutions.API
 {
@@ -20,8 +15,8 @@ namespace AlertSolutions.API
         {
             using (var webClient = new WebClient())
             {
-                        webClient.Headers.Add(header);
-                        return webClient.UploadString(location, xml);
+                webClient.Headers.Add(header);
+                return webClient.UploadString(location, xml);
             }
         }
 

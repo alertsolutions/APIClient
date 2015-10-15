@@ -15,7 +15,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             Console.WriteLine("Alert Solutions API Client SimpleDemo\n");
 
             var attachments = new List<Attachment>();
-            attachments.Add(Attachment.FromFile("Files\\Attachment.txt"));
+            attachments.Add(new AttachmentBuilder().FromFile("Files\\Attachment.txt"));
 
             var proofs = new List<string>();
             proofs.Add("example@alertsolutions.com");
@@ -28,9 +28,9 @@ namespace AlertSolutions.APIClientExamples.Demos
             eb.EmailSubject = "Alert Solutions API Client Demo";
             eb.EmailFrom = "example@alertsolutions.com";
             eb.EmailReplyTo = "example@alertsolutions.com";
-            eb.TextBody = TextBody.FromFile("Files\\Email.txt");
+            eb.TextBody = new EmailTextBuilder().FromFile("Files\\Email.txt");
             // be sure to modify the ContactList.csv file so the email goes to your intended destinations
-            eb.List = ContactList.FromFile("Files\\ContactList.csv");
+            eb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             eb.EmailHeader = "email";
             eb.Attachments = attachments;
             eb.Proofs = proofs;

@@ -37,6 +37,10 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -48,14 +52,22 @@
   <ItemGroup>
     <Compile Include="ApiClientResolver.cs" />
     <Compile Include="CallScript.cs" />
+    <Compile Include="CancelResponse.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Documents\Attachment.cs" />
-    <Compile Include="Documents\DocumentBase.cs" />
+    <Compile Include="Documents\ContactListBuilder.cs" />
+    <Compile Include="Documents\AttachmentBuilder.cs" />
     <Compile Include="Documents\ContactList.cs" />
-    <Compile Include="Documents\EmailBody.cs" />
+    <Compile Include="Documents\DocumentElementBuilder.cs" />
+    <Compile Include="Documents\EmailHtml.cs" />
+    <Compile Include="Documents\EmailTextBuilder.cs" />
+    <Compile Include="Documents\EmailHtmlBuilder.cs" />
+    <Compile Include="Documents\EmailText.cs" />
+    <Compile Include="Documents\FaxDocument.cs" />
+    <Compile Include="Documents\FaxDocumentBuilder.cs" />
+    <Compile Include="Documents\TextMessageBuilder.cs" />
     <Compile Include="Documents\VoiceDocument.cs" />
-    <Compile Include="Documents\Document.cs" />
-    <Compile Include="Documents\IContainDocuments.cs" />
+    <Compile Include="Documents\VoiceDocumentBuilder.cs" />
     <Compile Include="EmailReportItem.cs" />
     <Compile Include="IAPIClient.cs" />
     <Compile Include="OrderReport.cs" />
@@ -68,6 +80,7 @@
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Broadcasts\SMSBroadcast.cs" />
     <Compile Include="Messages\SMSMessage.cs" />
+    <Compile Include="Documents\HotKey.cs" />
     <Compile Include="Orders\Order.cs" />
     <Compile Include="OrderResponse.cs" />
     <Compile Include="Documents\TextMessage.cs" />
@@ -90,6 +103,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)..\AlertSolutions\lib /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

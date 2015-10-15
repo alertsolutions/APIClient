@@ -36,6 +36,8 @@ x64/
 *.vspscc
 *.vssscc
 .builds
+Build/coverage
+Build/coverage.xml
 
 # Visual C++ cache files
 ipch/

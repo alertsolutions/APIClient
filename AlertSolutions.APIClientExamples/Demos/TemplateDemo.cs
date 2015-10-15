@@ -38,14 +38,14 @@ namespace AlertSolutions.APIClientExamples.Demos
             vb.BillCode = "APIClient Demo";
             vb.ProjectCode = "APIClient Demo";
             vb.CallerID = "5555555555";
-            vb.List = ContactList.FromFile("Files\\ContactList.csv");
+            vb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             vb.VoiceHeader = "phone";
             vb.ThrottleType = VoiceBroadcast.VoiceThrottleType.MaximumCalls;
             vb.ThrottleNumber = 2;
-            vb.Documents = new List<Document>()
+            vb.Documents = new List<VoiceDocument>()
             { 
-                //VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Live),
-                VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),  
+                //new VoiceDocumentBuilder().FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Live),
+                new VoiceDocumentBuilder().FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),  
             };
 
             OrderResponse broadcastResponse = orderClient.LaunchBroadcast(vb);

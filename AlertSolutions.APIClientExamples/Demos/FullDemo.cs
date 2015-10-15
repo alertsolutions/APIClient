@@ -7,6 +7,7 @@ using AlertSolutions.API;
 using AlertSolutions.API.Documents;
 using AlertSolutions.API.Messages;
 using AlertSolutions.API.Broadcasts;
+using AlertSolutions.API.Orders;
 
 namespace AlertSolutions.APIClientExamples.Demos
 {
@@ -30,13 +31,13 @@ namespace AlertSolutions.APIClientExamples.Demos
             eb.EmailSubject = "Alert Solutions API Client Demo";
             eb.EmailFrom = "example@alertsolutions.com";
             eb.EmailReplyTo = "example@alertsolutions.com";
-            eb.Attachments = new List<Attachment>() { Attachment.FromFile("Files\\Attachment.txt") };
-            eb.List = ContactList.FromFile("Files\\ContactList.csv");
+            eb.Attachments = new List<Attachment>() { new AttachmentBuilder().FromFile("Files\\Attachment.txt") };
+            eb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             eb.EmailHeader = "email";
             eb.Proofs = new List<string>() { "example@alertsolutions.com" };
             // can use either Text or HTML
-            eb.HtmlBody = HtmlBody.FromFile("Files\\Email.html");
-            eb.TextBody = TextBody.FromFile("Files\\Email.txt");
+            eb.HtmlBody = new EmailHtmlBuilder().FromFile("Files\\Email.html");
+            eb.TextBody = new EmailTextBuilder().FromFile("Files\\Email.txt");
 
             broadcasts.Add(eb);
 
@@ -45,8 +46,8 @@ namespace AlertSolutions.APIClientExamples.Demos
             sb.BillCode = "APIClient Demo";
             sb.ProjectCode = "APIClient Demo";
             sb.ShortCode = "77811";
-            sb.TextMessage = TextMessage.FromFile("Files\\TextMessage.txt");
-            sb.List = ContactList.FromFile("Files\\ContactList.csv");
+            sb.TextMessage = new TextMessageBuilder().FromFile("Files\\TextMessage.txt");
+            sb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             sb.SMSHeader = "phone";
             sb.Proofs = new List<string>() { "5555555555" };
 
@@ -57,17 +58,17 @@ namespace AlertSolutions.APIClientExamples.Demos
             vb.BillCode = "APIClient Demo";
             vb.ProjectCode = "APIClient Demo";
             vb.CallerID = "5555555555";
-            vb.List = ContactList.FromFile("Files\\ContactList.csv");
+            vb.List = new ContactListBuilder().FromFile("Files\\ContactList.csv");
             vb.VoiceHeader = "phone";
             vb.ThrottleType = VoiceBroadcast.VoiceThrottleType.MaximumCalls;
             vb.ThrottleNumber = 2;
             // can be told to load an xml file, or be given the xml as text
             //vt.CallScript = CallScript.FromString("");
             //vt.CallScript = CallScript.FromFile("");
-            vb.Documents = new List<Document>()
+            vb.Documents = new List<VoiceDocument>()
             { 
                 //VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Live),
-                VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),  
+                new VoiceDocumentBuilder().FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),  
             };
 
             broadcasts.Add(vb);
@@ -77,13 +78,13 @@ namespace AlertSolutions.APIClientExamples.Demos
             fb.BillCode = "APIClient Demo";
             fb.ProjectCode = "APIClient Demo";
             fb.FaxFrom = "john doe";
-            fb.List = ContactList.FromFile("Files\\FaxList.csv");
+            fb.List = new ContactListBuilder().FromFile("Files\\FaxList.csv");
             fb.FaxHeader = "faxnumber";
             fb.Dedup = true;
-            fb.DocumentStyle = "Letter";
-            fb.Documents = new List<Document>()
+            fb.DocumentStyle = DocumentStyle.Letter;
+            fb.Documents = new List<FaxDocument>()
             { 
-                Document.FromFile("Files\\FaxText.txt"),
+                new FaxDocumentBuilder().FromFile("Files\\FaxText.txt"),
             };
 
             broadcasts.Add(fb);
@@ -101,9 +102,9 @@ namespace AlertSolutions.APIClientExamples.Demos
             em.EmailSubject = "Alert Solutions API Client Demo";
             em.EmailFrom = "example@alertsolutions.com";
             em.EmailReplyTo = "example@alertsolutions.com";
-            em.Attachments = new List<Attachment>() { Attachment.FromFile("Files\\Attachment.txt") };
+            em.Attachments = new List<Attachment>() { new AttachmentBuilder().FromFile("Files\\Attachment.txt") };
             // can use either Text or HTML
-            em.TextBody = TextBody.FromFile("Files\\Email.txt");
+            em.TextBody = new EmailTextBuilder().FromFile("Files\\Email.txt");
             //em.EmailBody = HtmlBody.FromFile("Files\\Email.html");
 
             messages.Add(em);
@@ -112,7 +113,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             var sm = new SMSMessage();
             sm.Number = "5555555555";
             sm.ShortCode = "77811"; // shared Alert Solutions Shortcode
-            sm.TextMessage = TextMessage.FromFile("Files\\TextMessage.txt");
+            sm.TextMessage = new TextMessageBuilder().FromFile("Files\\TextMessage.txt");
 
             messages.Add(sm);
 
@@ -122,10 +123,10 @@ namespace AlertSolutions.APIClientExamples.Demos
             //vt.CallScript = CallScript.FromFile("");
             vm.Phone = "5555555555";
             vm.CallerID = "5555555555";
-            vm.Documents = new List<Document>()
+            vm.Documents = new List<VoiceDocument>()
             { 
-                VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Live),
-                VoiceDocument.FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),
+                new VoiceDocumentBuilder().FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Live),
+                new VoiceDocumentBuilder().FromFile("Files\\VoiceMessage.txt", VoiceDocumentType.Message),
             };
 
             messages.Add(vm);
@@ -134,10 +135,10 @@ namespace AlertSolutions.APIClientExamples.Demos
             var fm = new FaxMessage();
             fm.FaxFrom = "john doe";
             fm.FaxNumber = "4014271405";
-            fm.DocumentStyle = "Letter";
-            fm.Documents = new List<Document>()
+            fm.DocumentStyle = DocumentStyle.Letter;
+            fm.Documents = new List<FaxDocument>()
             { 
-                Document.FromFile("Files\\FaxText.txt"),
+                new FaxDocumentBuilder().FromFile("Files\\FaxText.txt"),
             };
 
             messages.Add(fm);

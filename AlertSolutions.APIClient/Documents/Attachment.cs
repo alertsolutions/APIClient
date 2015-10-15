@@ -5,44 +5,16 @@ using System.Xml.Linq;
 
 namespace AlertSolutions.API.Documents
 {
-    public class Attachment : DocumentBase
+    [Serializable]
+    public class Attachment
     {
-        internal Attachment(string filePath) : base(filePath){}
-        internal Attachment(int fileID) : base(fileID){}
-        internal Attachment(string fileName, byte[] fileBinary) : base(fileName, fileBinary) { }
+        public int AttachmentID { get; internal set; }
+        public string AttachmentName { get; internal set; }
+        public byte[] AttachmentBinary { get; internal set; }
 
-        public static Attachment FromFile(string filePath)
+        internal XElement ToXml()
         {
-            return new Attachment(filePath);
-        }
-
-        public static Attachment FromText(string attachmentFileName, string attachmentText)
-        {
-            var bytes = Encoding.UTF8.GetBytes(attachmentText);
-            return new Attachment(attachmentFileName, bytes);
-        }
-
-        public static Attachment FromByteArray(string attachmentFileName, byte[] attachmentData)
-        {
-            return new Attachment(attachmentFileName, attachmentData);
-        }
-
-        public static Attachment FromBase64String(string attachmentFileName, string encodedAttachmentData)
-        {
-            var bytes = Convert.FromBase64String(encodedAttachmentData);
-            return new Attachment(attachmentFileName, bytes);
-        }
-
-        // TODO : should this part of PostAPI be made accessible through the client?
-        //public static Attachment FromID(int listID)
-        //{
-        //    return new Attachment(listID);
-        //}
-
-
-        public XElement ToXml()
-        {
-            return ToXml("Attachment");
+            return new DocumentElementBuilder().ToXml("Attachment", AttachmentID, AttachmentName, AttachmentBinary);
         }
     }
 }

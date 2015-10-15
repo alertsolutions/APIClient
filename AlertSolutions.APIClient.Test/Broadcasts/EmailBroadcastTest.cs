@@ -52,8 +52,8 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
         public void BuildXmlWithRequiredInput()
         {
             var eb = new EmailBroadcast();
-            eb.TextBody = TextBody.FromText("Required content");
-            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+            eb.TextBody = new EmailTextBuilder().FromText("Required content");
+            eb.List = new ContactListBuilder().FromText("requiredList.csv", "email\r\nsanta@northpole.com");
 
             Parse(eb);
         }
@@ -62,8 +62,8 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
         public void XmlOutputDefaultValuesTest()
         {
             var eb = new EmailBroadcast();
-            eb.TextBody = TextBody.FromText("Required content");
-            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+            eb.TextBody = new EmailTextBuilder().FromText("Required content");
+            eb.List = new ContactListBuilder().FromText("requiredList.csv", "email\r\nsanta@northpole.com");
             
             var xDoc = Parse(eb);
             VerifyFieldsExist(xDoc);
@@ -83,19 +83,19 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             eb.EmailHeader = "email";
             eb.EmailReplyTo = "ERT";
             eb.EmailSubject = "ES";
-            eb.HtmlBody = HtmlBody.FromText("Required content <b>html</b>");
+            eb.HtmlBody = new EmailHtmlBuilder().FromText("Required content <b>html</b>");
             eb.IsForward = true;
             eb.IsReplaceLink = true;
             eb.IsUnsubscribe = true;
             eb.LanguageHeader = "Dutch";
-            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+            eb.List = new ContactListBuilder().FromText("requiredList.csv", "email\r\nsanta@northpole.com");
             eb.NumberOfRedials = 3;
             eb.NumberOfResends = 2;
             eb.ProjectCode = "PC";
             eb.Proofs = new List<string>();
             eb.ResendInterval = "4";
             eb.SendTimeUTC = new DateTime(2010, 10, 12, 16, 15, 35);
-            eb.TextBody = TextBody.FromText("Required content plaintext");
+            eb.TextBody = new EmailTextBuilder().FromText("Required content plaintext");
 
             var xDoc = Parse(eb);
             VerifyFieldsExist(xDoc);
@@ -176,8 +176,8 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
         public void XmlOutputProofTest()
         {
             var eb = new EmailBroadcast();
-            eb.TextBody = TextBody.FromText("required content");
-            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+            eb.TextBody = new EmailTextBuilder().FromText("required content");
+            eb.List = new ContactListBuilder().FromText("requiredList.csv", "email\r\nsanta@northpole.com");
             eb.Proofs = new List<string>() { "elf1@northpole.com", "elf2@northpole.com", "elf3@northpole.com", "elf4@northpole.com", "elf5@northpole.com" };
 
             var xml = eb.ToXml();
@@ -205,13 +205,13 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
         public void XmlOutputAttachmentTest()
         {
             var eb = new EmailBroadcast();
-            eb.TextBody = TextBody.FromText("required content");
-            eb.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+            eb.TextBody = new EmailTextBuilder().FromText("required content");
+            eb.List = new ContactListBuilder().FromText("requiredList.csv", "email\r\nsanta@northpole.com");
             eb.Attachments = new List<Attachment>()
             {
-                Attachment.FromText("file1.txt", "content #1"), 
-                Attachment.FromText("file2.txt", "content #2"),
-                Attachment.FromText("file3.txt", "content #3")
+                new AttachmentBuilder().FromText("file1.txt", "content #1"), 
+                new AttachmentBuilder().FromText("file2.txt", "content #2"),
+                new AttachmentBuilder().FromText("file3.txt", "content #3")
             };
 
             var xml = eb.ToXml();
@@ -241,8 +241,8 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
         public void XmlOutputDedupFieldTest()
         {
             EmailBroadcast email = new EmailBroadcast();
-            email.TextBody = TextBody.FromText("Required content");
-            email.List = ContactList.FromText("requiredList.csv", "email\r\nsanta@northpole.com");
+            email.TextBody = new EmailTextBuilder().FromText("Required content");
+            email.List = new ContactListBuilder().FromText("requiredList.csv", "email\r\nsanta@northpole.com");
             email.Dedup = true;
             email.DedupField = "Id";
 
@@ -267,7 +267,7 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
                 DisplayName = "jt",
                 EmailSubject = "test email message",
                 SendTimeUTC = DateTime.UtcNow,
-                TextBody = TextBody.FromText("This is a test email")
+                TextBody = new EmailTextBuilder().FromText("This is a test email")
             };
 
             StringBuilder sb = new StringBuilder();

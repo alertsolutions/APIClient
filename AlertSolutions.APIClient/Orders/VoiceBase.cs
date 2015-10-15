@@ -9,31 +9,25 @@ namespace AlertSolutions.API.Orders
 {
     // handle code common to VT and VL
     [Serializable]
-    public abstract class VoiceBase : Order, IContainDocuments
+    public abstract class VoiceBase : Order
     {
-        // accessors for document info ( goes into each class that inherits IContainDocuments)
-        private DocumentInfo _documentInfo = new DocumentInfo();
-        public List<Document> Documents {
-            get { return _documentInfo.Documents; } 
-            set { _documentInfo.Documents = value; } 
-        }
+        public List<VoiceDocument> Documents { get; set; }
 
         public string CallerID { get; set; }
         public DateTime StopTimeUTC { get; set; }
         public DateTime RestartTimeUTC { get; set; }
         public int DurationHours { get; set; }
 
-        public Dictionary<string, string> HotKeys { get; set; }
+        public List<HotKey> HotKeys { get; set; }
 
         public CallScript CallScript { get; set; }
 
-        internal VoiceBase()
+        protected VoiceBase()
         {
             CallScript = null;
-            HotKeys = new Dictionary<string, string>();
-
+            HotKeys = new List<HotKey>();
             CallerID = "0";
-            
+            Documents = new List<VoiceDocument>();
         }
 
         protected override XDocument BuildXml()
@@ -69,50 +63,23 @@ namespace AlertSolutions.API.Orders
                 orderTag.Add(el);
             }
 
-            var voiceDocs = _documentInfo.Documents.FindAll(s => s.GetType() == typeof(VoiceDocument));
 
-            if(_documentInfo.Documents.Count != voiceDocs.Count)
-            {
-                throw new FormatException("Must only use a voice document for a voice order.");
-            }
+            if(Documents == null)
+                Documents = new List<VoiceDocument>();
 
-            orderTag.Add(_documentInfo.GetDocuments());
+            if (Documents.Count < 1)
+                throw new FormatException("Must have at least one voice document.");
+
+            var xDocs = new XElement("Documents");
+            Documents.ForEach(doc => xDocs.Add(doc.ToXml()));
+            orderTag.Add(xDocs);
 
             return xmlDoc;
         }
 
         private List<XElement> GetHotKeyElements()
         {
-            var xList = new List<XElement>();
-            var hotkeyNames = new Dictionary<string, string>()
-            { 
-                { "HotZero", "0" }, 
-                { "HotOne", "1" },
-                { "HotTwo", "2" },
-                { "HotThree", "3" },
-                { "HotFour", "4" },
-                { "HotFive", "5" },
-                { "HotSix", "6" },
-                { "HotSeven", "7" },
-                { "HotEight", "8" },
-                { "HotNine", "9" },
-                { "HotStar", "*" },
-                { "HotPound", "#" } 
-            };
-            
-            foreach(var name in hotkeyNames)
-            {
-                if (HotKeys.ContainsKey(name.Value))
-                {
-                    xList.Add(new XElement(name.Key, HotKeys[name.Value]));
-                }
-                else
-                {
-                    xList.Add(new XElement(name.Key));
-                }
-            }
-
-            return xList;
+            return HotKeys.Select(key => key.ToXml()).ToList();
         }
     }
 }

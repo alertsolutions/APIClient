@@ -10,7 +10,7 @@ using AlertSolutions.API.Orders;
 namespace AlertSolutions.API.Broadcasts
 {
     [Serializable]
-    public class VoiceBroadcast : VoiceBase, IBroadcast
+    public class VoiceBroadcast : VoiceBase, IBroadcast, IMultiLanguageBroadcast
     {
         public enum VoiceThrottleType
         {
@@ -49,6 +49,7 @@ namespace AlertSolutions.API.Broadcasts
             this.LanguageHeader = "";
             this.ThrottleType = VoiceThrottleType.None;
             this.ThrottleNumber = 1;
+            this.Documents = new List<VoiceDocument>();
         }
 
         public override string ToXml()

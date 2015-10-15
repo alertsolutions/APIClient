@@ -8,16 +8,16 @@ using AlertSolutions.API.Documents;
 namespace AlertSolutions.API.Orders
 {
     // handle code common to TL and WL
-    public abstract class FaxBase : Order, IContainDocuments
+    public enum DocumentStyle { Letter, Legal, A4 }
+
+    public abstract class FaxBase : Order
     {
-        // accessors for document info ( goes into each class that inherits IContainDocuments)
-        private DocumentInfo _documentInfo = new DocumentInfo();
-        public List<Document> Documents { get { return _documentInfo.Documents; } set { _documentInfo.Documents = value; } }
+        public List<FaxDocument> Documents { get; set; }
 
         public int NumberOfRedials { get; set; }
         public string FaxFrom { get; set; }
         public string ToHeader { get; set; }
-        public string DocumentStyle { get; set; }
+        public DocumentStyle DocumentStyle { get; set; }
 
         internal FaxBase()
         {
@@ -33,7 +33,15 @@ namespace AlertSolutions.API.Orders
             orderTag.Add(new XElement("FaxFrom", FaxFrom));
             orderTag.Add(new XElement("DocumentStyle", DocumentStyle));
 
-            orderTag.Add(_documentInfo.GetDocuments());
+            if (Documents == null)
+                Documents = new List<FaxDocument>();
+
+            if (Documents.Count < 1)
+                throw new FormatException("Must have at least one fax document.");
+
+            var xDocs = new XElement("Documents");
+            Documents.ForEach(doc => xDocs.Add(doc.ToXml()));
+            orderTag.Add(xDocs);
 
             return xmlDoc;
         }

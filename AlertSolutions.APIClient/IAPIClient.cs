@@ -15,7 +15,23 @@ namespace AlertSolutions.API
         /// <param name="url">The URL.</param>
         /// <param name="user">The user.</param>
         /// <param name="password">The password.</param>
-        void Initialize(string url, string user, string password);
+        void InitializeWithUser(string url, string user, string password);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="sessionId"></param>
+        void InitializeWithUserAndSession(string url, string user, string password, string sessionId);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="sessionId"></param>
+        void InitializeWithSession(string url, string sessionId);
 
         /// <summary>
         /// If activated the client pretends it's sending broadcasts or messages.
@@ -74,9 +90,9 @@ namespace AlertSolutions.API
         /// <summary>
         /// Cancels an order. All broadcasts and messages are orders.
         /// </summary>
-        string CancelOrder(OrderResponse response);
+        ICancelResponse CancelOrder(OrderResponse response);
 
-        string CancelOrder(int orderid, OrderType type);
+        ICancelResponse CancelOrder(int orderid, OrderType type);
 
         /// <summary>
         /// Returns a collection of contact lists associated with the user.

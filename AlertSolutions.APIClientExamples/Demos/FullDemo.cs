@@ -7,6 +7,7 @@ using AlertSolutions.API;
 using AlertSolutions.API.Documents;
 using AlertSolutions.API.Messages;
 using AlertSolutions.API.Broadcasts;
+using AlertSolutions.API.Orders;
 
 namespace AlertSolutions.APIClientExamples.Demos
 {
@@ -80,7 +81,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             fb.List = new ContactListBuilder().FromFile("Files\\FaxList.csv");
             fb.FaxHeader = "faxnumber";
             fb.Dedup = true;
-            fb.DocumentStyle = "Letter";
+            fb.DocumentStyle = DocumentStyle.Letter;
             fb.Documents = new List<FaxDocument>()
             { 
                 new FaxDocumentBuilder().FromFile("Files\\FaxText.txt"),
@@ -134,7 +135,7 @@ namespace AlertSolutions.APIClientExamples.Demos
             var fm = new FaxMessage();
             fm.FaxFrom = "john doe";
             fm.FaxNumber = "4014271405";
-            fm.DocumentStyle = "Letter";
+            fm.DocumentStyle = DocumentStyle.Letter;
             fm.Documents = new List<FaxDocument>()
             { 
                 new FaxDocumentBuilder().FromFile("Files\\FaxText.txt"),

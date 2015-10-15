@@ -8,6 +8,8 @@ using AlertSolutions.API.Documents;
 namespace AlertSolutions.API.Orders
 {
     // handle code common to TL and WL
+    public enum DocumentStyle { Letter, Legal, A4 }
+
     public abstract class FaxBase : Order
     {
         public List<FaxDocument> Documents { get; set; }
@@ -15,7 +17,7 @@ namespace AlertSolutions.API.Orders
         public int NumberOfRedials { get; set; }
         public string FaxFrom { get; set; }
         public string ToHeader { get; set; }
-        public string DocumentStyle { get; set; }
+        public DocumentStyle DocumentStyle { get; set; }
 
         internal FaxBase()
         {

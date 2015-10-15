@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace AlertSolutions.API.Documents
@@ -9,9 +8,8 @@ namespace AlertSolutions.API.Documents
     [Serializable]
     public class TextMessage
     {
-
-        internal int MessageID { get; set; }
-        internal string Message { get; set; }
+        public int MessageID { get; internal set; }
+        public string Message { get; internal set; }
 
         public List<XElement> ToXml()
         {

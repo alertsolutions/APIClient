@@ -8,6 +8,10 @@ using AlertSolutions.API.Orders;
 
 namespace AlertSolutions.API.Broadcasts
 {
+    public interface IMultiLanguageBroadcast : IBroadcast
+    {
+        string LanguageHeader { get; set; }
+    }
     // enforces fields so orders using it will have these fields accessible to the user
     public interface IBroadcast : IOrder
     {
@@ -15,6 +19,7 @@ namespace AlertSolutions.API.Broadcasts
         string ProjectCode { get; set; }
         ContactList List { get; set; }
         bool AutoLaunch { get; set; }
+        bool Dedup { get; set; }
     }
 
     // common code for broadcast orders

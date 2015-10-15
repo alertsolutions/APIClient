@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Linq;
 
 namespace AlertSolutions.API.Documents
@@ -15,10 +13,10 @@ namespace AlertSolutions.API.Documents
     [Serializable]
     public class VoiceDocument
     {
-        internal int VoiceDocumentID { get; set; }
-        internal string VoiceDocumentName { get; set; }
-        internal byte[] VoiceDocumentBinary { get; set; }
-        internal VoiceDocumentType VoiceDocumentType { get; set; }
+        public int VoiceDocumentID { get; internal set; }
+        public string VoiceDocumentName { get; internal set; }
+        public byte[] VoiceDocumentBinary { get; internal set; }
+        public VoiceDocumentType VoiceDocumentType { get; internal set; }
 
         internal XElement ToXml()
         {

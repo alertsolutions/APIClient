@@ -28,7 +28,7 @@ namespace AlertSolutions.APIClient.Test.Messages
             var faxMessage = new FaxMessage();
             faxMessage.FaxFrom = "james";
             faxMessage.FaxNumber = "4013002095";
-            faxMessage.DocumentStyle = "Letter";
+            faxMessage.DocumentStyle = DocumentStyle.Letter;
             faxMessage.Documents = new List<FaxDocument>()
             { 
                 new FaxDocumentBuilder().FromText("message.txt", "This is a test fax sent using the API Client."),

@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using AlertSolutions.API.Broadcasts;
 using AlertSolutions.API.Documents;
-using AlertSolutions.API.Messages;
 using AlertSolutions.API.Orders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -104,17 +101,6 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             Assert.IsTrue(Enumerable.Range(0, 5).Contains(int.Parse(orderTag.Element("NumberOfRedials").Value)));
             Assert.IsTrue(Enumerable.Range(0, 3).Contains(int.Parse(orderTag.Element("NumberOfResends").Value)));
             Assert.IsNotNull(orderTag.Element("CallerID").Value);
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotOne").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotTwo").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotThree").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotFour").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotFive").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotSix").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotSeven").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotEight").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotNine").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotPound").Value));
-            Assert.IsTrue(string.IsNullOrEmpty(orderTag.Element("HotStar").Value));
             Assert.IsNotNull(string.IsNullOrEmpty(orderTag.Element("ThrType").Value));
             Assert.IsNotNull(string.IsNullOrEmpty(orderTag.Element("ThrNum").Value));
 
@@ -148,17 +134,7 @@ namespace AlertSolutions.APIClient.Test.Broadcasts
             Assert.IsNotNull(orderTag.Element("NumberOfRedials"));
             Assert.IsNotNull(orderTag.Element("NumberOfResends"));
             Assert.IsNotNull(orderTag.Element("CallerID"));
-            Assert.IsNotNull(orderTag.Element("HotOne"));
-            Assert.IsNotNull(orderTag.Element("HotTwo"));
-            Assert.IsNotNull(orderTag.Element("HotThree"));
-            Assert.IsNotNull(orderTag.Element("HotFour"));
-            Assert.IsNotNull(orderTag.Element("HotFive"));
-            Assert.IsNotNull(orderTag.Element("HotSix"));
-            Assert.IsNotNull(orderTag.Element("HotSeven"));
-            Assert.IsNotNull(orderTag.Element("HotEight"));
-            Assert.IsNotNull(orderTag.Element("HotNine"));
-            Assert.IsNotNull(orderTag.Element("HotPound"));
-            Assert.IsNotNull(orderTag.Element("HotStar"));
+
             Assert.IsNotNull(orderTag.Element("ThrType"));
             Assert.IsNotNull(orderTag.Element("ThrNum"));
             Assert.IsNotNull(orderTag.Element("ListID"));

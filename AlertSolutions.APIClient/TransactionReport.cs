@@ -17,5 +17,16 @@ namespace AlertSolutions.API.Orders
 
         public string OrderStatus { get; set; }
         public string ReportData { get; set; }
+
+        public TransactionReport(OrderResponse response, RequestResultType requestResult, string error, string orderStatus, string reportData)
+        {
+            OrderID = response.OrderID;
+            Unqid = response.Unqid;
+            OrderType = response.OrderType;
+            RequestResult = requestResult;
+            RequestErrorMessage = error;
+            OrderStatus = orderStatus;
+            ReportData = reportData;
+        }
     }
 }
